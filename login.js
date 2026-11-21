@@ -31,90 +31,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ==================== 5-SECOND ANIMATION + BACK LOCK ====================
-const SPLASH_SHOWN_KEY = "svgp_5s_splash_shown";
+const SPLASH_KEY = "svgp_vibrant_splash_v1";
+
 const splashLoader = document.getElementById("splash-loader");
-const waitBarFill = document.getElementById("wait-bar-fill");
-const waitPercent = document.getElementById("wait-percent");
+const splashFill = document.getElementById("splash-fill");
+const splashPct = document.getElementById("splash-pct");
 
-let progressTimer = null;
-let splashDoneTimer = null;
-
-function hideSplashAndLockBack() {
-  clearInterval(progressTimer);
-  clearTimeout(splashDoneTimer);
-  sessionStorage.setItem(SPLASH_SHOWN_KEY, "1");
-  if (!splashLoader) return;
-  splashLoader.style.transition = "none";
-  splashLoader.classList.add("is-hidden");
-}
-
-function runFiveSecondAnimation() {
-  if (!splashLoader) return;
-
-  if (sessionStorage.getItem(SPLASH_SHOWN_KEY) === "1") {
-    hideSplashAndLockBack();
-    return;
-  }
-
-  try {
-    history.replaceState({ page: "login" }, "", window.location.href);
-    history.pushState({ page: "login-locked" }, "", window.location.href);
-  } catch (_) {}
-
-  let pct = 0;
-  progressTimer = setInterval(() => {
-    pct = Math.min(100, pct + 2);
-    if (waitBarFill) waitBarFill.style.width = `${pct}%`;
-    if (waitPercent) waitPercent.textContent = `${pct}%`;
-    if (pct >= 100) clearInterval(progressTimer);
-  }, 100);
-
-  splashDoneTimer = setTimeout(() => {
-    hideSplashAndLockBack();
-  }, 5000);
-}
-
-window.addEventListener("DOMContentLoaded", runFiveSecondAnimation);
-
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted || sessionStorage.getItem(SPLASH_SHOWN_KEY) === "1") {
-    hideSplashAndLockBack();
-  }
-});
-
-// If user presses Back on Login, stay on Login and never go back to splash
-window.addEventListener("popstate", () => {
-  hideSplashAndLockBack();
-  try {
-    history.pushState({ page: "login-locked" }, "", window.location.href);
-  } catch (_) {}
-});
-
-function getFriendlyAuthError(err) {
-  const code = err?.code || "";
-  switch (code) {
-    case "auth/invalid-credential":
-    case "auth/wrong-password":
-    case "auth/user-not-found":
-      return "Invalid User ID / Mobile No or Password.";
-    case "auth/too-many-requests":
-      return "Too many attempts. Please try again later.";
-    case "auth/network-request-failed":
-      return "Network error. Please check your internet connection.";
-    default:
-      return err?.message || "Something went wrong.";
-  }
-}
-
-// ==================== ELEMENTS ====================
 const loginCard = document.getElementById("login-card");
 const welcomeCard = document.getElementById("welcome-card");
 
 const loginForm = document.getElementById("login-form");
 const identifierEl = document.getElementById("login-identifier");
 const passwordEl = document.getElementById("login-password");
-const loginBtn = document.getElementById("login-btn");
 const loginMsgEl = document.getElementById("login-msg");
 
 const forgotPanel = document.getElementById("forgot-panel");
@@ -127,23 +55,60 @@ const resetMsgEl = document.getElementById("reset-msg");
 
 const welcomeAvatar = document.getElementById("welcome-avatar");
 const welcomeTitle = document.getElementById("welcome-title");
-const detailName = document.getElementById("detail-name");
 const detailUsername = document.getElementById("detail-username");
 const detailMobile = document.getElementById("detail-mobile");
 const detailEmail = document.getElementById("detail-email");
 const logoutBtn = document.getElementById("logout-btn");
 
-function setMsg(el, text, isError = true) {
-  if (!text) {
-    el.textContent = "";
-    el.className = "status-text";
-    return;
-  }
-  el.textContent = text;
-  el.className = `status-text ${isError ? "error" : "success"}`;
+let splashInterval = null;
+let splashGuard = null;
+let autoDashTimer = null;
+
+function hideSplash(instant = false) {
+  clearInterval(splashInterval);
+  clearTimeout(splashGuard);
+  try { sessionStorage.setItem(SPLASH_KEY, "1"); } catch (_) {}
+
+  if (splashFill) splashFill.style.width = "100%";
+  if (splashPct) splashPct.textContent = "100%";
+  if (!splashLoader) return;
+  if (instant) splashLoader.style.transition = "none";
+  splashLoader.classList.add("is-done");
 }
 
-document.querySelectorAll(".vis-btn").forEach((btn) => {
+function startSplash() {
+  if (!splashLoader) return;
+  let seen = false;
+  try { seen = sessionStorage.getItem(SPLASH_KEY) === "1"; } catch (_) {}
+
+  if (seen) {
+    hideSplash(true);
+    return;
+  }
+
+  let pct = 0;
+  splashInterval = setInterval(() => {
+    pct = Math.min(100, pct + 8);
+    if (splashFill) splashFill.style.width = `${pct}%`;
+    if (splashPct) splashPct.textContent = `${pct}%`;
+    if (pct >= 100) hideSplash(false);
+  }, 90);
+
+  splashGuard = setTimeout(() => hideSplash(false), 2600);
+}
+
+window.addEventListener("DOMContentLoaded", startSplash);
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) hideSplash(true);
+});
+
+function setMsg(el, text, isError = true) {
+  if (!el) return;
+  el.textContent = text;
+  el.className = `msg ${isError ? "error" : "success"}`;
+}
+
+document.querySelectorAll(".eye-toggle").forEach((btn) => {
   btn.addEventListener("click", () => {
     const input = document.getElementById(btn.dataset.target);
     if (!input) return;
@@ -153,11 +118,11 @@ document.querySelectorAll(".vis-btn").forEach((btn) => {
   });
 });
 
-async function findUserByIdentifier(rawIdentifier) {
-  const val = rawIdentifier.trim();
-  const lowerVal = val.toLowerCase();
+async function findUserByIdentifier(rawVal) {
+  const val = rawVal.trim();
+  const lower = val.toLowerCase();
 
-  let q = query(collection(db, "users"), where("username", "==", lowerVal));
+  let q = query(collection(db, "users"), where("username", "==", lower));
   let snap = await getDocs(q);
 
   if (snap.empty) {
@@ -181,22 +146,15 @@ loginForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  loginBtn.disabled = true;
-  loginBtn.textContent = "Logging in...";
-
   try {
-    const userProfile = await findUserByIdentifier(identifier);
-    if (!userProfile || !userProfile.email) {
+    const profile = await findUserByIdentifier(identifier);
+    if (!profile || !profile.email) {
       setMsg(loginMsgEl, "No account found with this User ID or Mobile No.");
       return;
     }
-
-    await signInWithEmailAndPassword(auth, userProfile.email, password);
+    await signInWithEmailAndPassword(auth, profile.email, password);
   } catch (err) {
-    setMsg(loginMsgEl, getFriendlyAuthError(err));
-  } finally {
-    loginBtn.disabled = false;
-    loginBtn.textContent = "Login";
+    setMsg(loginMsgEl, err.message);
   }
 });
 
@@ -214,7 +172,6 @@ backToLoginBtn.addEventListener("click", () => {
   setMsg(loginMsgEl, "");
 });
 
-// Forgot Password: Match Mobile No + Gmail ID -> Send Reset Link & Redirect to admin.html
 forgotPanel.addEventListener("submit", async (e) => {
   e.preventDefault();
   setMsg(resetMsgEl, "");
@@ -228,7 +185,7 @@ forgotPanel.addEventListener("submit", async (e) => {
   }
 
   sendResetBtn.disabled = true;
-  sendResetBtn.textContent = "Verifying...";
+  sendResetBtn.textContent = "Checking...";
 
   try {
     const q = query(
@@ -239,56 +196,45 @@ forgotPanel.addEventListener("submit", async (e) => {
     const snap = await getDocs(q);
 
     if (snap.empty) {
-      setMsg(resetMsgEl, "Mobile number and Gmail ID do not match any registered account.");
+      setMsg(resetMsgEl, "Mobile number and Gmail ID do not match any account.");
       return;
     }
 
-    const matchedDoc = snap.docs[0];
-    const matchedData = matchedDoc.data();
-
     await sendPasswordResetEmail(auth, email);
-    await updateDoc(doc(db, "users", matchedDoc.id), {
+    await updateDoc(doc(db, "users", snap.docs[0].id), {
       lastResetLinkSentAt: new Date().toISOString()
     });
 
-    sessionStorage.setItem(
-      "svgp_admin_recovery",
-      JSON.stringify({
-        username: matchedData.username || "-",
-        mobile: matchedData.mobile || mobile,
-        email,
-        resetSent: true
-      })
+    setMsg(
+      resetMsgEl,
+      `Password reset link sent to ${email}. Check Inbox/Spam.`,
+      false
     );
-
-    setMsg(resetMsgEl, "Matched! Redirecting to Admin Page...", false);
-    setTimeout(() => {
-      window.location.href = "admin.html";
-    }, 650);
   } catch (err) {
-    setMsg(resetMsgEl, getFriendlyAuthError(err));
+    setMsg(resetMsgEl, err.message);
   } finally {
     sendResetBtn.disabled = false;
-    sendResetBtn.textContent = "Verify & Go to Admin Page";
+    sendResetBtn.textContent = "Verify & Send Reset Link";
   }
 });
 
 logoutBtn.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-  } catch (err) {
-    setMsg(loginMsgEl, getFriendlyAuthError(err));
-  }
+  clearTimeout(autoDashTimer);
+  await signOut(auth);
 });
 
+// Auto-login & Welcome Card -> Dashboard
 onAuthStateChanged(auth, async (user) => {
+  clearTimeout(autoDashTimer);
+
   if (user) {
+    const fallbackName = user.displayName || "Student";
     let profile = {
-      fullName: user.displayName || "Member",
+      fullName: fallbackName,
       username: "-",
       mobile: "-",
-      email: user.email,
-      profileImage: "https://api.dicebear.com/9.x/initials/svg?seed=SVGP"
+      email: user.email || "",
+      profileImage: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(fallbackName)}`
     };
 
     try {
@@ -300,21 +246,20 @@ onAuthStateChanged(auth, async (user) => {
 
     welcomeAvatar.src = profile.profileImage;
     welcomeTitle.textContent = `Welcome, ${profile.fullName}!`;
-    detailName.textContent = profile.fullName;
     detailUsername.textContent = profile.username;
     detailMobile.textContent = profile.mobile;
     detailEmail.textContent = profile.email;
 
     loginCard.style.display = "none";
     welcomeCard.style.display = "block";
+    hideSplash(false);
+
+    // Automatically open Dashboard after showing Welcome card
+    autoDashTimer = setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 1800);
   } else {
     welcomeCard.style.display = "none";
     loginCard.style.display = "block";
-  }
-});
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.location.href = "dashboard.html";
   }
 });

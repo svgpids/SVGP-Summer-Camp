@@ -3,124 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SVGP Summer Camp — Login</title>
+  <title>SVGP Summer Camp — Sign In &amp; Welcome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="common.css" />
-  <link rel="stylesheet" href="splash.css" />
-  <link rel="stylesheet" href="login.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ==================== 5-SECOND LOADING ANIMATION ==================== -->
-  <div id="splash-loader" class="splash-screen" aria-label="Loading SVGP Summer Camp">
-    <div class="splash-inner">
-      <img src="logo.png" alt="SVGP Summer Camp Logo" class="splash-logo-img" />
-      <h1 class="splash-brand-label">SVGP SUMMER CAMP</h1>
-      <p class="splash-sub-label">Computer Training Portal</p>
+  <div class="vibrant-bg" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
 
-      <div class="wait-loader-box" aria-hidden="true">
-        <div class="wait-caption">PLEASE WAIT</div>
-        <div class="wait-bar-track">
-          <div id="wait-bar-fill" class="wait-bar-fill"></div>
-        </div>
-        <div id="wait-percent" class="wait-percent">0%</div>
+  <!-- Smooth Splash Loader -->
+  <div id="splash-loader" class="splash-screen" aria-label="Loading SVGP Summer Camp">
+    <div class="splash-box">
+      <img src="logo.png" alt="SVGP Summer Camp Logo" class="splash-logo" onerror="this.style.display='none'" />
+      <h1 class="splash-title">SVGP SUMMER CAMP</h1>
+      <p class="splash-sub">S.V. Government Polytechnic • Tirupati</p>
+      <div class="splash-meter">
+        <div id="splash-fill" class="splash-fill"></div>
       </div>
+      <span id="splash-pct" class="splash-pct">0%</span>
     </div>
   </div>
 
-  <!-- ==================== LOGIN ONLY PORTAL ==================== -->
-  <main class="frame-wrap">
-    <section id="login-card" class="ledger-card">
-      <header class="masthead">
-        <span class="institution-tag">S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
-        <h2 class="masthead-title">SVGP Summer Camp</h2>
-        <p class="masthead-subtitle">Student &amp; Portal Sign In</p>
+  <main class="shell">
+    <!-- Sign In Card (No Create Account) -->
+    <section id="login-card" class="auth-card" style="display: none;">
+      <header class="card-banner">
+        <span class="banner-pill">SVGP COMPUTER TRAINING</span>
+        <h1>SVGP Summer Camp</h1>
+        <p>Sign in with your User ID or Mobile Number</p>
       </header>
 
-      <div class="ledger-body">
-        <!-- Login Form Only (Create Account Removed) -->
-        <form id="login-form" class="stage-panel" novalidate>
-          <div class="panel-head">
-            <h2>Login</h2>
-            <p>Sign in with your User ID or Mobile Number</p>
-          </div>
-
-          <div class="form-row">
+      <div class="card-body">
+        <form id="login-form" novalidate>
+          <div class="field-group">
             <label for="login-identifier">User ID or Mobile No</label>
-            <div class="input-shell">
-              <input type="text" id="login-identifier" placeholder="Enter User ID or Mobile No" autocomplete="username" required />
-              <span class="valid-mark">✓</span>
+            <div class="input-box">
+              <input type="text" id="login-identifier" placeholder="Enter User ID or Mobile No" required />
+              <span class="tick">✓</span>
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="field-group">
             <label for="login-password">Password</label>
-            <div class="input-shell">
-              <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required />
-              <button type="button" class="vis-btn" data-target="login-password" title="Show/Hide Password">👁</button>
+            <div class="input-box">
+              <input type="password" id="login-password" placeholder="Enter your password" required />
+              <button type="button" class="eye-toggle" data-target="login-password" title="Show/Hide Password">👁</button>
             </div>
           </div>
 
-          <div class="row-end">
-            <button type="button" id="open-forgot-btn" class="inline-link">Forgot Password?</button>
+          <div class="forgot-row">
+            <button type="button" id="open-forgot-btn" class="link-btn">Forgot Password?</button>
           </div>
 
-          <div class="cta-group">
-            <button type="submit" id="login-btn" class="btn-primary-blue full-w">Login</button>
-          </div>
+          <button type="submit" id="login-btn" class="btn-vivid full-w">Sign In</button>
 
-          <div id="login-msg" class="status-text" role="alert" aria-live="polite"></div>
+          <div id="login-msg" class="msg" role="status" aria-live="polite"></div>
         </form>
 
-        <!-- Forgot Password: Match Mobile No + Gmail ID -> Redirect to Admin Page -->
-        <form id="forgot-panel" class="stage-panel" style="display: none;" novalidate>
-          <div class="panel-head">
-            <h2>Forgot Password</h2>
-            <p>Enter registered Mobile No &amp; Gmail ID to proceed to Admin Page</p>
+        <form id="forgot-panel" style="display: none;" novalidate>
+          <div class="sub-head">
+            <h2>Reset Password</h2>
+            <p>Enter registered Mobile No &amp; Gmail ID</p>
           </div>
 
-          <div class="form-row">
+          <div class="field-group">
             <label for="reset-mobile">Registered Mobile No</label>
-            <div class="input-shell">
+            <div class="input-box">
               <input type="tel" id="reset-mobile" placeholder="Enter registered Mobile No" required />
-              <span class="valid-mark">✓</span>
+              <span class="tick">✓</span>
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="field-group">
             <label for="reset-email">Registered Gmail ID</label>
-            <div class="input-shell">
+            <div class="input-box">
               <input type="email" id="reset-email" placeholder="Enter registered Gmail ID" required />
-              <span class="valid-mark">✓</span>
+              <span class="tick">✓</span>
             </div>
           </div>
 
-          <button type="submit" id="send-reset-btn" class="btn-primary-blue full-w">Verify &amp; Go to Admin Page</button>
+          <button type="submit" id="send-reset-btn" class="btn-vivid full-w">Verify &amp; Send Reset Link</button>
 
-          <div class="row-center">
-            <button type="button" id="back-to-login-btn" class="inline-link">← Back to Login</button>
+          <div class="center-row">
+            <button type="button" id="back-to-login-btn" class="link-btn">← Back to Sign In</button>
           </div>
 
-          <div id="reset-msg" class="status-text" role="alert" aria-live="polite"></div>
+          <div id="reset-msg" class="msg" role="status" aria-live="polite"></div>
         </form>
       </div>
     </section>
 
-    <!-- Logged-In Student Card -->
-    <section id="welcome-card" class="member-card" style="display: none;">
-      <img id="welcome-avatar" src="" alt="Profile Photo" class="member-avatar" />
+    <!-- Auto-Login Welcome Card (Student Photo + Name -> Smoothly Opens Dashboard) -->
+    <section id="welcome-card" class="welcome-card" style="display: none;">
+      <div class="welcome-glow-ring">
+        <img id="welcome-avatar" src="" alt="Student Photo" class="welcome-avatar" />
+      </div>
+      <span class="welcome-tag">AUTO-LOGIN VERIFIED</span>
       <h2 id="welcome-title">Welcome!</h2>
-      <span class="member-badge">SVGP Summer Camp Student</span>
+      <p class="welcome-sub">Preparing your Attendance Calendar &amp; PDF Notes...</p>
 
-      <div class="member-table">
-        <div class="member-item"><span>Full Name</span><strong id="detail-name"></strong></div>
-        <div class="member-item"><span>User ID</span><strong id="detail-username"></strong></div>
-        <div class="member-item"><span>Mobile No</span><strong id="detail-mobile"></strong></div>
-        <div class="member-item"><span>Gmail ID</span><strong id="detail-email"></strong></div>
+      <div class="info-box">
+        <div><span>User ID</span><strong id="detail-username">-</strong></div>
+        <div><span>Mobile No</span><strong id="detail-mobile">-</strong></div>
+        <div><span>Gmail ID</span><strong id="detail-email">-</strong></div>
       </div>
 
-      <button type="button" id="logout-btn" class="btn-crimson">Logout</button>
+      <div class="welcome-actions">
+        <a href="dashboard.html" id="go-dash-btn" class="btn-vivid">Go to Dashboard →</a>
+        <button type="button" id="logout-btn" class="btn-ghost-danger">Logout</button>
+      </div>
     </section>
   </main>
 
