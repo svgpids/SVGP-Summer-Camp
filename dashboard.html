@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVGP Summer Camp — Calendar Attendance &amp; PDF Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="campus-field" aria-hidden="true"></div>
+
+  <div class="dash-wrap">
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="brand-box">
+        <img src="logo.png" alt="SVGP Summer Camp Logo" class="brand-logo" />
+        <div>
+          <span class="kicker">S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
+          <h1>SVGP Summer Camp</h1>
+        </div>
+      </div>
+
+      <div class="user-chip">
+        <img id="stu-avatar" src="" alt="Profile" class="stu-avatar" />
+        <div class="stu-meta">
+          <strong id="stu-name">Loading...</strong>
+          <span id="stu-id">ID: -</span>
+        </div>
+        <button type="button" id="logout-btn" class="btn-logout">Logout</button>
+      </div>
+    </header>
+
+    <!-- Summary Cards -->
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-label">Attendance %</span>
+        <strong id="stat-pct" class="stat-val">0%</strong>
+        <small id="stat-days" class="stat-sub">0 / 0 days</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Present Days</span>
+        <strong id="stat-present" class="stat-val is-present">0</strong>
+        <small class="stat-sub">Marked Present</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Absent Days</span>
+        <strong id="stat-absent" class="stat-val is-absent">0</strong>
+        <small class="stat-sub">Marked Absent</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">PDF Notes</span>
+        <strong id="stat-pdfs" class="stat-val">0</strong>
+        <small class="stat-sub">Drive PDF files</small>
+      </article>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tab-nav" role="tablist">
+      <button type="button" class="tab-btn is-active" data-tab="calendar">
+        Attendance Calendar
+      </button>
+      <button type="button" class="tab-btn" data-tab="pdfs">
+        Class Notes (PDF)
+      </button>
+    </nav>
+
+    <!-- TAB 1: CALENDAR ATTENDANCE -->
+    <section id="tab-calendar" class="panel-card is-active">
+      <div class="panel-header">
+        <div>
+          <h2>Daily Attendance Calendar</h2>
+          <p>Each day shows Present or Absent from SVGP_Attendance_2026</p>
+        </div>
+
+        <div class="cal-nav">
+          <button type="button" id="prev-month-btn" class="btn-soft">← Prev</button>
+          <strong id="cal-month-label" class="cal-month-title">November 2026</strong>
+          <button type="button" id="next-month-btn" class="btn-soft">Next →</button>
+          <button type="button" id="sync-btn" class="btn-soft">↻ Sync</button>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <span><i class="dot dot-present"></i> Present</span>
+        <span><i class="dot dot-absent"></i> Absent</span>
+        <span><i class="dot dot-none"></i> No Record</span>
+      </div>
+
+      <div class="weekdays-row">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+
+      <div id="calendar-grid" class="calendar-grid"></div>
+
+      <div id="day-detail-box" class="day-detail-box">
+        Tap any marked date on the calendar to view subject &amp; faculty details.
+      </div>
+    </section>
+
+    <!-- TAB 2: PDF NOTES -->
+    <section id="tab-pdfs" class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h2>Class Notes (PDF Files)</h2>
+          <p>View or download PDF notes from Google Drive</p>
+        </div>
+        <div class="notes-filters">
+          <input type="search" id="pdf-search" placeholder="Search PDF notes..." />
+          <select id="pdf-subject-filter" aria-label="Filter PDFs by Subject">
+            <option value="ALL">All Subjects</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="pdf-grid" class="pdf-grid">
+        <p class="empty-msg">Loading PDF notes from Google Drive...</p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

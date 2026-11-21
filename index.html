@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVGP Summer Camp — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="common.css" />
+  <link rel="stylesheet" href="splash.css" />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <!-- ==================== 5-SECOND LOADING ANIMATION ==================== -->
+  <div id="splash-loader" class="splash-screen" aria-label="Loading SVGP Summer Camp">
+    <div class="splash-inner">
+      <img src="logo.png" alt="SVGP Summer Camp Logo" class="splash-logo-img" />
+      <h1 class="splash-brand-label">SVGP SUMMER CAMP</h1>
+      <p class="splash-sub-label">Computer Training Portal</p>
+
+      <div class="wait-loader-box" aria-hidden="true">
+        <div class="wait-caption">PLEASE WAIT</div>
+        <div class="wait-bar-track">
+          <div id="wait-bar-fill" class="wait-bar-fill"></div>
+        </div>
+        <div id="wait-percent" class="wait-percent">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIN ONLY PORTAL ==================== -->
+  <main class="frame-wrap">
+    <section id="login-card" class="ledger-card">
+      <header class="masthead">
+        <span class="institution-tag">S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
+        <h2 class="masthead-title">SVGP Summer Camp</h2>
+        <p class="masthead-subtitle">Student &amp; Portal Sign In</p>
+      </header>
+
+      <div class="ledger-body">
+        <!-- Login Form Only (Create Account Removed) -->
+        <form id="login-form" class="stage-panel" novalidate>
+          <div class="panel-head">
+            <h2>Login</h2>
+            <p>Sign in with your User ID or Mobile Number</p>
+          </div>
+
+          <div class="form-row">
+            <label for="login-identifier">User ID or Mobile No</label>
+            <div class="input-shell">
+              <input type="text" id="login-identifier" placeholder="Enter User ID or Mobile No" autocomplete="username" required />
+              <span class="valid-mark">✓</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="login-password">Password</label>
+            <div class="input-shell">
+              <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required />
+              <button type="button" class="vis-btn" data-target="login-password" title="Show/Hide Password">👁</button>
+            </div>
+          </div>
+
+          <div class="row-end">
+            <button type="button" id="open-forgot-btn" class="inline-link">Forgot Password?</button>
+          </div>
+
+          <div class="cta-group">
+            <button type="submit" id="login-btn" class="btn-primary-blue full-w">Login</button>
+          </div>
+
+          <div id="login-msg" class="status-text" role="alert" aria-live="polite"></div>
+        </form>
+
+        <!-- Forgot Password: Match Mobile No + Gmail ID -> Redirect to Admin Page -->
+        <form id="forgot-panel" class="stage-panel" style="display: none;" novalidate>
+          <div class="panel-head">
+            <h2>Forgot Password</h2>
+            <p>Enter registered Mobile No &amp; Gmail ID to proceed to Admin Page</p>
+          </div>
+
+          <div class="form-row">
+            <label for="reset-mobile">Registered Mobile No</label>
+            <div class="input-shell">
+              <input type="tel" id="reset-mobile" placeholder="Enter registered Mobile No" required />
+              <span class="valid-mark">✓</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="reset-email">Registered Gmail ID</label>
+            <div class="input-shell">
+              <input type="email" id="reset-email" placeholder="Enter registered Gmail ID" required />
+              <span class="valid-mark">✓</span>
+            </div>
+          </div>
+
+          <button type="submit" id="send-reset-btn" class="btn-primary-blue full-w">Verify &amp; Go to Admin Page</button>
+
+          <div class="row-center">
+            <button type="button" id="back-to-login-btn" class="inline-link">← Back to Login</button>
+          </div>
+
+          <div id="reset-msg" class="status-text" role="alert" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Logged-In Student Card -->
+    <section id="welcome-card" class="member-card" style="display: none;">
+      <img id="welcome-avatar" src="" alt="Profile Photo" class="member-avatar" />
+      <h2 id="welcome-title">Welcome!</h2>
+      <span class="member-badge">SVGP Summer Camp Student</span>
+
+      <div class="member-table">
+        <div class="member-item"><span>Full Name</span><strong id="detail-name"></strong></div>
+        <div class="member-item"><span>User ID</span><strong id="detail-username"></strong></div>
+        <div class="member-item"><span>Mobile No</span><strong id="detail-mobile"></strong></div>
+        <div class="member-item"><span>Gmail ID</span><strong id="detail-email"></strong></div>
+      </div>
+
+      <button type="button" id="logout-btn" class="btn-crimson">Logout</button>
+    </section>
+  </main>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

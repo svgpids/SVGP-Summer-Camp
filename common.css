@@ -1,0 +1,341 @@
+/* common.css */
+:root {
+  --blue-deep: #0f294a;
+  --blue-royal: #1d4ed8;
+  --blue-sky: #0284c7;
+  --accent-indigo: #4338ca;
+  --bg-cream: #f4f1ea;
+  --surface-card: #fffdf9;
+  --surface-inset: #f2f5fb;
+  --ink-charcoal: #0f172a;
+  --ink-muted: #475569;
+  --line-rule: #d5dde8;
+  --err: #b91c1c;
+  --r-card: 18px;
+  --r-input: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 14px;
+  background-color: var(--bg-cream);
+  color: var(--ink-charcoal);
+}
+
+.frame-wrap {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ledger-card {
+  width: 100%;
+  background: var(--surface-card);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(15, 41, 74, 0.09);
+  animation: cardEnter 0.45s ease both;
+}
+
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.masthead {
+  background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-royal) 62%, var(--blue-sky) 100%);
+  color: #ffffff;
+  padding: 22px 24px 18px;
+  border-bottom: 3px solid var(--blue-sky);
+  text-align: center;
+}
+
+.institution-tag {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #e0f2fe;
+  margin-bottom: 5px;
+}
+
+.masthead-title {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.masthead-subtitle {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #e0f2fe;
+}
+
+.ledger-body {
+  padding: 24px 26px 28px;
+}
+
+.panel-head {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.panel-head h2 {
+  margin: 0 0 4px;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue-deep);
+}
+
+.panel-head p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+.form-row {
+  margin-bottom: 14px;
+}
+
+.form-row label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.input-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-shell input {
+  width: 100%;
+  padding: 10px 34px 10px 12px;
+  border: 1px solid var(--line-rule);
+  border-radius: var(--r-input);
+  background: #ffffff;
+  font-size: 13.5px;
+  color: var(--ink-charcoal);
+  outline: none;
+}
+
+.input-shell input:focus {
+  border-color: var(--blue-royal);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+}
+
+.valid-mark {
+  position: absolute;
+  right: 11px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.input-shell input:valid:not(:placeholder-shown) + .valid-mark {
+  color: var(--blue-royal);
+}
+
+.vis-btn {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  color: var(--ink-muted);
+}
+
+.inline-link {
+  background: none;
+  border: none;
+  color: var(--blue-royal);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.inline-link:hover {
+  text-decoration: underline;
+  color: var(--accent-indigo);
+}
+
+.cta-group {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary-blue {
+  flex: 1;
+  padding: 11px 16px;
+  border: 1px solid var(--blue-deep);
+  border-radius: var(--r-input);
+  background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-royal) 100%);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary-blue.full-w {
+  width: 100%;
+}
+
+.btn-primary-blue:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn-primary-blue:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.status-text {
+  margin-top: 14px;
+  min-height: 18px;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.error {
+  color: var(--err);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.success {
+  color: var(--blue-royal);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+@media (max-width: 600px) {
+  .ledger-body {
+    padding: 20px 18px 24px;
+  }
+}
+
+/* login.css */
+.row-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
+.row-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.member-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface-card);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--r-card);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(15, 41, 74, 0.09);
+}
+
+.member-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--blue-royal);
+  margin-bottom: 10px;
+}
+
+.member-card h2 {
+  margin: 0 0 6px;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 21px;
+  color: var(--blue-deep);
+}
+
+.member-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--blue-royal);
+  background: var(--surface-inset);
+  border: 1px solid var(--line-rule);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.member-table {
+  margin: 18px 0 22px;
+  background: var(--surface-inset);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--r-input);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line-rule);
+  font-size: 13px;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-item span {
+  color: var(--ink-muted);
+}
+
+.member-item strong {
+  color: var(--ink-charcoal);
+  word-break: break-all;
+}
+
+.btn-crimson {
+  padding: 10px 24px;
+  border: 1px solid var(--err);
+  border-radius: var(--r-input);
+  background: #ffffff;
+  color: var(--err);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-crimson:hover {
+  background: var(--err);
+  color: #ffffff;
+}

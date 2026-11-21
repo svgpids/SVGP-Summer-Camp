@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVGP Summer Camp — Admin Recovery Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="common.css" />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <main class="frame-wrap">
+    <section class="ledger-card">
+      <header class="masthead">
+        <span class="institution-tag">S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
+        <h1 class="masthead-title">Admin Recovery Console</h1>
+        <p class="masthead-subtitle">SVGP Summer Camp Password Assistance</p>
+      </header>
+
+      <div class="ledger-body">
+        <div class="panel-head">
+          <h2>Account Verification Status</h2>
+          <p id="admin-status-desc">Verified recovery request details</p>
+        </div>
+
+        <div class="member-table" style="margin-top: 0;">
+          <div class="member-item"><span>User ID</span><strong id="adm-username">-</strong></div>
+          <div class="member-item"><span>Mobile No</span><strong id="adm-mobile">-</strong></div>
+          <div class="member-item"><span>Gmail ID</span><strong id="adm-email">-</strong></div>
+          <div class="member-item"><span>Reset Link</span><strong id="adm-link-status">Sent</strong></div>
+        </div>
+
+        <div class="cta-group">
+          <a href="index.html" class="btn-primary-blue full-w">← Back to Login</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    const raw = sessionStorage.getItem("svgp_admin_recovery");
+    if (raw) {
+      try {
+        const data = JSON.parse(raw);
+        document.getElementById("adm-username").textContent = data.username || "-";
+        document.getElementById("adm-mobile").textContent = data.mobile || "-";
+        document.getElementById("adm-email").textContent = data.email || "-";
+        document.getElementById("adm-link-status").textContent = data.resetSent
+          ? "Sent to Gmail"
+          : "Pending";
+      } catch (_) {}
+    }
+  </script>
+</body>
+</html>

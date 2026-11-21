@@ -1,0 +1,93 @@
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #f4f1ea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.splash-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.splash-logo-img {
+  width: clamp(180px, 50vw, 225px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: transparent;
+}
+
+.splash-brand-label {
+  margin: 14px 0 3px;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: clamp(20px, 5vw, 25px);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #0f294a;
+}
+
+.splash-sub-label {
+  margin: 0 0 24px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13px;
+  color: #475569;
+}
+
+.wait-loader-box {
+  width: min(320px, 88vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+}
+
+.wait-caption {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  color: #0f294a;
+}
+
+.wait-bar-track {
+  width: 100%;
+  height: 14px;
+  border-radius: 999px;
+  padding: 2px;
+  background: #fffdf9;
+  border: 1.5px solid #0284c7;
+  box-shadow: inset 0 1px 3px rgba(15, 41, 74, 0.12);
+  overflow: hidden;
+}
+
+.wait-bar-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 48%, #0284c7 100%);
+  transition: width 0.08s linear;
+}
+
+.wait-percent {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #1d4ed8;
+}

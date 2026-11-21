@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - IRG App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <!-- Login Card -->
+    <section id="login-card" class="auth-card">
+      <aside class="brand-panel">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+
+        <div class="brand-content">
+          <div class="logo-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="rocket-icon">
+              <path d="M12 2.5c3.8 1.2 6.5 4.6 6.5 8.8 0 2.4-.9 4.6-2.5 6.3l.4 3.4-3.3-1.4c-1.4.4-2.8.4-4.2 0l-3.3 1.4.4-3.4C4.4 15.9 3.5 13.7 3.5 11.3c0-4.2 2.7-7.6 6.5-8.8h2zm0 5.2a2.1 2.1 0 1 0 0 4.2 2.1 2.1 0 0 0 0-4.2z"/>
+            </svg>
+          </div>
+          <h1 class="brand-title">IRG Studio</h1>
+          <p class="brand-sub">Sign in using your User ID or Mobile Number.</p>
+        </div>
+
+        <div class="cloud-waves" aria-hidden="true">
+          <svg viewBox="0 0 220 600" preserveAspectRatio="none" class="wave-desktop">
+            <path class="wave-layer-back" d="M220,0 L120,0 C95,45 145,95 115,150 C85,205 145,255 110,315 C75,375 140,435 105,500 C80,545 105,575 115,600 L220,600 Z" />
+            <path class="wave-layer-mid" d="M220,0 L142,0 C118,52 162,102 134,158 C106,214 160,265 128,325 C96,385 154,442 122,505 C98,550 120,578 130,600 L220,600 Z" />
+            <path class="wave-layer-front" d="M220,0 L165,0 C142,58 182,108 156,165 C130,222 178,274 148,334 C118,394 170,450 140,512 C118,556 138,582 146,600 L220,600 Z" />
+          </svg>
+          <svg viewBox="0 0 800 90" preserveAspectRatio="none" class="wave-mobile">
+            <path class="wave-layer-back" d="M0,25 Q100,0 200,28 T400,26 T600,30 T800,20 L800,90 L0,90 Z" />
+            <path class="wave-layer-mid" d="M0,42 Q120,18 240,44 T480,40 T720,45 L800,38 L800,90 L0,90 Z" />
+            <path class="wave-layer-front" d="M0,58 Q140,36 280,60 T560,56 T800,60 L800,90 L0,90 Z" />
+          </svg>
+        </div>
+      </aside>
+
+      <div class="form-panel">
+        <!-- Normal Login Form -->
+        <form id="login-form" class="form-inner" novalidate>
+          <h2>Sign In</h2>
+
+          <div class="input-group">
+            <label for="login-identifier">User ID or Mobile No</label>
+            <div class="input-wrap">
+              <input type="text" id="login-identifier" placeholder="Enter User ID or Mobile No" required />
+              <span class="check-icon">✓</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="login-password" placeholder="Enter your password" required />
+              <button type="button" class="eye-btn" data-target="login-password" title="Show/Hide">👁</button>
+            </div>
+          </div>
+
+          <div class="helper-row">
+            <button type="button" id="open-forgot-btn" class="link-btn-inline">Forgot Password?</button>
+          </div>
+
+          <div class="action-buttons">
+            <button type="submit" id="login-btn" class="btn-primary">Sign In</button>
+            <a href="register.html" class="btn-outline link-btn">Create Account</a>
+          </div>
+
+          <div id="login-msg" class="msg" role="status" aria-live="polite"></div>
+        </form>
+
+        <!-- Forgot Password Panel (Mobile No + Gmail Match -> Send Reset Link) -->
+        <form id="forgot-panel" class="form-inner" style="display: none;" novalidate>
+          <h2>Reset Password</h2>
+
+          <div class="input-group">
+            <label for="reset-mobile">Registered Mobile No</label>
+            <div class="input-wrap">
+              <input type="tel" id="reset-mobile" placeholder="Enter registered mobile number" required />
+              <span class="check-icon">✓</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="reset-email">Registered Gmail ID</label>
+            <div class="input-wrap">
+              <input type="email" id="reset-email" placeholder="Enter registered Gmail ID" required />
+              <span class="check-icon">✓</span>
+            </div>
+          </div>
+
+          <button type="submit" id="send-reset-btn" class="btn-primary full-width">
+            Verify &amp; Send Reset Link
+          </button>
+
+          <div class="helper-row" style="margin-top: 14px;">
+            <button type="button" id="back-to-login-btn" class="link-btn-inline">← Back to Login</button>
+          </div>
+
+          <div id="reset-msg" class="msg" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Welcome Profile View After Login -->
+    <section id="welcome-card" class="dashboard-card" style="display: none;">
+      <img id="welcome-avatar" src="" alt="Profile Photo" class="welcome-avatar" />
+      <h2 id="welcome-title">Welcome!</h2>
+      <div class="profile-details">
+        <p><strong>Full Name:</strong> <span id="detail-name"></span></p>
+        <p><strong>User ID:</strong> <span id="detail-username"></span></p>
+        <p><strong>Mobile No:</strong> <span id="detail-mobile"></span></p>
+        <p><strong>Gmail:</strong> <span id="detail-email"></span></p>
+      </div>
+      <button type="button" id="logout-btn" class="btn-logout">Logout</button>
+    </section>
+  </main>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

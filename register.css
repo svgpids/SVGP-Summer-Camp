@@ -1,0 +1,97 @@
+/* login.css */
+.row-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
+.row-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.member-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface-card);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--r-card);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(15, 41, 74, 0.09);
+}
+
+.member-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--blue-royal);
+  margin-bottom: 10px;
+}
+
+.member-card h2 {
+  margin: 0 0 6px;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 21px;
+  color: var(--blue-deep);
+}
+
+.member-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--blue-royal);
+  background: var(--surface-inset);
+  border: 1px solid var(--line-rule);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.member-table {
+  margin: 18px 0 22px;
+  background: var(--surface-inset);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--r-input);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line-rule);
+  font-size: 13px;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-item span {
+  color: var(--ink-muted);
+}
+
+.member-item strong {
+  color: var(--ink-charcoal);
+  word-break: break-all;
+}
+
+.btn-crimson {
+  padding: 10px 24px;
+  border: 1px solid var(--err);
+  border-radius: var(--r-input);
+  background: #ffffff;
+  color: var(--err);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-crimson:hover {
+  background: var(--err);
+  color: #ffffff;
+}

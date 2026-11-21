@@ -1,0 +1,106 @@
+.svgp-welcome-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #faf7f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  overflow: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.svgp-welcome-screen.is-dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.svgp-3d-stage {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.logo-img-3d-scene {
+  width: clamp(190px, 50vw, 240px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-img-3d-card {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.real-logo-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.colorful-loader {
+  margin-top: 22px;
+  width: min(290px, 86vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.loader-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 4.5px;
+  color: #1e293b;
+}
+
+.loader-track {
+  width: 100%;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #fffdf9;
+  border: 1px solid #dfd7c8;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+  align-items: center;
+}
+
+.seg {
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  animation: plainColorPulse 1.6s ease-in-out infinite;
+}
+
+.seg-1  { --seg-color: #d97706; animation-delay: 0.00s; }
+.seg-2  { --seg-color: #ea580c; animation-delay: 0.12s; }
+.seg-3  { --seg-color: #e11d48; animation-delay: 0.24s; }
+.seg-4  { --seg-color: #db2777; animation-delay: 0.36s; }
+.seg-5  { --seg-color: #7c3aed; animation-delay: 0.48s; }
+.seg-6  { --seg-color: #4f46e5; animation-delay: 0.60s; }
+.seg-7  { --seg-color: #2563eb; animation-delay: 0.72s; }
+.seg-8  { --seg-color: #0284c7; animation-delay: 0.84s; }
+.seg-9  { --seg-color: #0d9488; animation-delay: 0.96s; }
+.seg-10 { --seg-color: #059669; animation-delay: 1.08s; }
+.seg-11 { --seg-color: #65a30d; animation-delay: 1.20s; }
+.seg-12 { --seg-color: #ca8a04; animation-delay: 1.32s; }
+
+@keyframes plainColorPulse {
+  0%, 100% {
+    background-color: #e2e8f0;
+  }
+  50% {
+    background-color: var(--seg-color);
+  }
+}
