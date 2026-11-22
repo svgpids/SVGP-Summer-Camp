@@ -1,14 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import {
-  getAuth,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBqopRPyEYBvUAfV2ZnWbH2wvitpVPk2M",
@@ -20,8 +12,9 @@ const firebaseConfig = {
   measurementId: "G-YEQ2DC0R7Q"
 };
 
-// Replace with your deployed Google Apps Script Web App URL:
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3m8TAMNrvthET_UqL2Kjo-g3Yu4sMqMr-GAkSJAnnaP4f6_spWmCxAWLZpX4mrUAQ/exec";
+const APPS_SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+const SESSION_EXPIRY_KEY = "svgp_session_expires_at";
+const BACK_AFTER_LOGOUT_KEY = "svgp_back_after_logout";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -29,171 +22,186 @@ const db = getFirestore(app);
 
 let studentProfile = null;
 let attendanceList = [];
-let pdfNotesList = [];
-let viewDate = new Date();
+let holidaysList = [];
+let announcementsList = [];
+let notesList = [];
+let calDate = new Date();
 
-// DOM elements
-const stuAvatar = document.getElementById("stu-avatar");
-const stuName = document.getElementById("stu-name");
-const stuId = document.getElementById("stu-id");
-const logoutBtn = document.getElementById("logout-btn");
-
-const statPct = document.getElementById("stat-pct");
-const statDays = document.getElementById("stat-days");
-const statPresent = document.getElementById("stat-present");
-const statAbsent = document.getElementById("stat-absent");
-const statPdfs = document.getElementById("stat-pdfs");
-
-const calMonthLabel = document.getElementById("cal-month-label");
-const calendarGrid = document.getElementById("calendar-grid");
-const dayDetailBox = document.getElementById("day-detail-box");
-const prevMonthBtn = document.getElementById("prev-month-btn");
-const nextMonthBtn = document.getElementById("next-month-btn");
-const syncBtn = document.getElementById("sync-btn");
-
-const pdfSearch = document.getElementById("pdf-search");
-const pdfSubjectFilter = document.getElementById("pdf-subject-filter");
-const pdfGrid = document.getElementById("pdf-grid");
-
-// Tab switch
-document.querySelectorAll(".tab-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("is-active"));
-    document.querySelectorAll(".panel-card").forEach((p) => p.classList.remove("is-active"));
-    btn.classList.add("is-active");
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.add("is-active");
-  });
-});
-
-logoutBtn.addEventListener("click", async () => {
-  await signOut(auth);
-  window.location.href = "index.html";
-});
-
-function formatYMD(year, monthIndex, day) {
-  const m = String(monthIndex + 1).padStart(2, "0");
-  const d = String(day).padStart(2, "0");
-  return `${year}-${m}-${d}`;
+function formatMMSS(ms) {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const m = String(Math.floor(totalSec / 60)).padStart(2, "0");
+  const s = String(totalSec % 60).padStart(2, "0");
+  return `${m}:${s}`;
 }
 
-function updateStats() {
-  const total = attendanceList.length;
-  const presentCount = attendanceList.filter((r) => r.status === "Present").length;
-  const absentCount = attendanceList.filter((r) => r.status === "Absent").length;
-  const pct = total ? Math.round((presentCount / total) * 100) : 0;
+async function logoutNow() {
+  sessionStorage.setItem(BACK_AFTER_LOGOUT_KEY, "1");
+  localStorage.removeItem(SESSION_EXPIRY_KEY);
+  await signOut(auth);
+  window.location.href = "index.html";
+}
 
-  statPct.textContent = `${pct}%`;
-  statDays.textContent = `${presentCount} / ${total} days`;
-  statPresent.textContent = String(presentCount);
-  statAbsent.textContent = String(absentCount);
-  statPdfs.textContent = String(pdfNotesList.length);
+document.getElementById("logout-btn-desktop").addEventListener("click", logoutNow);
+document.getElementById("logout-btn-top").addEventListener("click", logoutNow);
+
+setInterval(async () => {
+  const exp = Number(localStorage.getItem(SESSION_EXPIRY_KEY));
+  if (!exp) return;
+  const rem = exp - Date.now();
+  const timerEl = document.getElementById("session-timer");
+  if (timerEl) timerEl.textContent = formatMMSS(rem);
+
+  if (rem <= 0) {
+    await logoutNow();
+  }
+}, 1000);
+
+const pageTitles = {
+  overview: "Student Overview",
+  calendar: "Attendance Calendar",
+  notes: "Notes & Study Materials",
+  announcements: "Latest Announcements"
+};
+
+function openSection(sectionName) {
+  document.querySelectorAll(".panel-view").forEach((sec) => {
+    sec.classList.toggle("is-active", sec.id === `sec-${sectionName}`);
+  });
+  document.getElementById("page-heading").textContent = pageTitles[sectionName] || "Dashboard";
+
+  document.querySelectorAll(".side-link, .m-nav-btn[data-section]").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.section === sectionName);
+  });
+}
+
+document.querySelectorAll(".side-link, .m-nav-btn[data-section]").forEach((btn) => {
+  btn.addEventListener("click", () => openSection(btn.dataset.section));
+});
+
+document.querySelectorAll("[data-jump]").forEach((btn) => {
+  btn.addEventListener("click", () => openSection(btn.dataset.jump));
+});
+
+function makeYMD(y, m, d) {
+  return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
 
 function renderCalendar() {
-  const year = viewDate.getFullYear();
-  const month = viewDate.getMonth();
-
-  calMonthLabel.textContent = viewDate.toLocaleDateString("en-US", {
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
+  document.getElementById("cal-month-label").textContent = calDate.toLocaleDateString("en-US", {
     month: "long",
     year: "numeric"
   });
 
-  const recordsByDate = {};
-  for (const rec of attendanceList) {
-    if (!rec.date) continue;
-    if (!recordsByDate[rec.date]) recordsByDate[rec.date] = [];
-    recordsByDate[rec.date].push(rec);
-  }
+  const attByDate = {};
+  attendanceList.forEach((row) => {
+    if (!attByDate[row.date]) attByDate[row.date] = [];
+    attByDate[row.date].push(row);
+  });
 
-  const firstDayIndex = new Date(year, month, 1).getDay();
+  const holByDate = {};
+  holidaysList.forEach((h) => {
+    holByDate[h.date] = h;
+  });
+
+  const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells = [];
+  const html = [];
 
-  for (let i = 0; i < firstDayIndex; i++) {
-    cells.push(`<div class="cal-cell is-muted" aria-hidden="true"></div>`);
+  for (let i = 0; i < firstDay; i++) {
+    html.push(`<div class="cal-cell is-empty"></div>`);
   }
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const ymd = formatYMD(year, month, day);
-    const dayRecs = recordsByDate[ymd] || [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = makeYMD(year, month, d);
+    const recs = attByDate[key] || [];
+    const hol = holByDate[key];
 
-    let cellClass = "cal-cell";
-    let badgeHtml = "";
+    let cls = "cal-cell";
+    let tag = "";
 
-    if (dayRecs.length > 0) {
-      const hasAbsent = dayRecs.some((r) => r.status === "Absent");
-      const statusLabel = hasAbsent ? "Absent" : "Present";
-      cellClass += hasAbsent ? " is-absent" : " is-present";
-      badgeHtml = `<span class="cal-status-pill ${hasAbsent ? "pill-absent" : "pill-present"}">${statusLabel}</span>`;
+    if (hol || recs.some((r) => r.status === "Holiday")) {
+      cls += " st-holiday";
+      tag = `<span class="c-tag">Holiday</span>`;
+    } else if (recs.length > 0) {
+      const hasAbsent = recs.some((r) => r.status === "Absent");
+      cls += hasAbsent ? " st-absent" : " st-present";
+      tag = `<span class="c-tag">${hasAbsent ? "Absent" : "Present"}</span>`;
     }
 
-    cells.push(`
-      <button type="button" class="${cellClass}" data-date="${ymd}">
-        <span class="cal-day-num">${day}</span>
-        ${badgeHtml}
+    html.push(`
+      <button type="button" class="${cls}" data-date="${key}">
+        <span class="c-num">${d}</span>
+        ${tag}
       </button>
     `);
   }
 
-  calendarGrid.innerHTML = cells.join("");
+  const grid = document.getElementById("calendar-grid");
+  grid.innerHTML = html.join("");
 
-  calendarGrid.querySelectorAll("button[data-date]").forEach((btn) => {
+  grid.querySelectorAll("button[data-date]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const ymd = btn.dataset.date;
-      const list = recordsByDate[ymd] || [];
-      if (!list.length) {
-        dayDetailBox.innerHTML = `<strong>${ymd}:</strong> No attendance entry found for this date.`;
-        return;
+      grid.querySelectorAll(".cal-cell").forEach((c) => c.classList.remove("is-picked"));
+      btn.classList.add("is-picked");
+
+      const dKey = btn.dataset.date;
+      const recs = attByDate[dKey] || [];
+      const hol = holByDate[dKey];
+      const box = document.getElementById("date-detail-box");
+
+      if (hol) {
+        box.innerHTML = `<strong>${dKey} • Holiday (${hol.occasion}):</strong> ${hol.note}`;
+      } else if (recs.length > 0) {
+        box.innerHTML =
+          `<strong>${dKey} Attendance Details:</strong><br>` +
+          recs.map((r) => `• <strong>${r.status}</strong> — ${r.subject} (Marked by: ${r.markedBy})`).join("<br>");
+      } else {
+        box.innerHTML = `<strong>${dKey}:</strong> No attendance or holiday entry recorded for this date.`;
       }
-      dayDetailBox.innerHTML =
-        `<strong>${ymd}:</strong> ` +
-        list
-          .map(
-            (item) =>
-              `<span style="font-weight:700;color:${
-                item.status === "Present" ? "#1d4ed8" : "#b91c1c"
-              }">${item.status}</span> (${item.subject} • Marked by ${item.markedBy})`
-          )
-          .join(" | ");
     });
   });
 }
 
-function populatePdfSubjects() {
-  const subjects = [...new Set(pdfNotesList.map((n) => n.subject).filter(Boolean))];
-  pdfSubjectFilter.innerHTML =
-    `<option value="ALL">All Subjects</option>` +
-    subjects.map((s) => `<option value="${s}">${s}</option>`).join("");
-}
+document.getElementById("prev-month").addEventListener("click", () => {
+  calDate = new Date(calDate.getFullYear(), calDate.getMonth() - 1, 1);
+  renderCalendar();
+});
 
-function renderPdfNotes() {
-  const qText = pdfSearch.value.trim().toLowerCase();
-  const subj = pdfSubjectFilter.value;
+document.getElementById("next-month").addEventListener("click", () => {
+  calDate = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 1);
+  renderCalendar();
+});
 
-  const filtered = pdfNotesList.filter((n) => {
-    const matchSubj = subj === "ALL" || n.subject === subj;
-    const text = `${n.title} ${n.fileName} ${n.description} ${n.subject}`.toLowerCase();
-    return matchSubj && (!qText || text.includes(qText));
+function renderNotesGrid() {
+  const search = document.getElementById("note-search").value.trim().toLowerCase();
+  const subject = document.getElementById("note-subject-filter").value;
+
+  const filtered = notesList.filter((n) => {
+    const okSub = subject === "ALL" || n.subject === subject;
+    const okQ = !search || `${n.title} ${n.subject} ${n.faculty}`.toLowerCase().includes(search);
+    return okSub && okQ;
   });
 
+  const grid = document.getElementById("notes-grid");
   if (!filtered.length) {
-    pdfGrid.innerHTML = `<p class="empty-msg">No PDF notes found in Drive.</p>`;
+    grid.innerHTML = `<p style="color:#64748b;font-size:13px;">No study materials found.</p>`;
     return;
   }
 
-  pdfGrid.innerHTML = filtered
+  grid.innerHTML = filtered
     .map(
-      (pdf) => `
-      <article class="pdf-card">
+      (n) => `
+      <article class="note-card">
         <div>
-          <span class="pdf-badge">PDF • ${pdf.subject}</span>
-          <h3>${pdf.title}</h3>
-          <p>${pdf.description}</p>
-          <div class="pdf-meta">${pdf.fileName} • ${pdf.sizeKB} KB • ${pdf.updatedAt}</div>
+          <span class="subj-badge">${n.subject}</span>
+          <h4>${n.title}</h4>
+          <p class="note-sub">By ${n.faculty} • ${n.updatedAt}</p>
         </div>
-        <div class="pdf-actions">
-          <a href="${pdf.previewUrl}" target="_blank" rel="noopener">Open PDF ↗</a>
-          <a href="${pdf.downloadUrl}" target="_blank" rel="noopener">Download ↓</a>
+        <div class="note-btns">
+          <a href="${n.previewUrl}" target="_blank" rel="noopener" class="n-btn n-view">View PDF</a>
+          <a href="${n.downloadUrl}" target="_blank" rel="noopener" class="n-btn n-dl">Download ↓</a>
         </div>
       </article>
     `
@@ -201,15 +209,149 @@ function renderPdfNotes() {
     .join("");
 }
 
-async function syncAttendanceAndPdfs() {
+document.getElementById("note-search").addEventListener("input", renderNotesGrid);
+document.getElementById("note-subject-filter").addEventListener("change", renderNotesGrid);
+
+function renderDashboard() {
+  const working = attendanceList.filter((r) => r.status !== "Holiday");
+  const present = working.filter((r) => r.status === "Present").length;
+  const absent = working.filter((r) => r.status === "Absent").length;
+  const pct = working.length ? Math.round((present / working.length) * 100) : 0;
+  const totalHolidays = holidaysList.length + attendanceList.filter((r) => r.status === "Holiday").length;
+
+  document.getElementById("kpi-pct").textContent = `${pct}%`;
+  document.getElementById("kpi-ratio").textContent = `${present} / ${working.length} working days`;
+  document.getElementById("kpi-present").textContent = String(present);
+  document.getElementById("kpi-absent").textContent = String(absent);
+  document.getElementById("kpi-holidays").textContent = String(totalHolidays);
+  document.getElementById("kpi-notes-count").textContent = `${notesList.length} PDF materials`;
+
+  document.getElementById("overview-recent").innerHTML = attendanceList.slice(0, 4).length
+    ? attendanceList
+        .slice(0, 4)
+        .map(
+          (r) => `
+          <div class="list-item">
+            <span><strong>${r.date}</strong> • ${r.subject}</span>
+            <strong style="color:${r.status === "Present" ? "#15803d" : r.status === "Holiday" ? "#475569" : "#b91c1c"}">${r.status}</strong>
+          </div>`
+        )
+        .join("")
+    : `<p style="color:#64748b;font-size:13px;">No attendance entries yet.</p>`;
+
+  document.getElementById("overview-ann").innerHTML = announcementsList.slice(0, 3).length
+    ? announcementsList
+        .slice(0, 3)
+        .map(
+          (a) => `
+          <div class="list-item">
+            <span><strong>${a.title}</strong></span>
+            <small style="color:#64748b">${a.date}</small>
+          </div>`
+        )
+        .join("")
+    : `<p style="color:#64748b;font-size:13px;">No announcements yet.</p>`;
+
+  document.getElementById("announcements-full").innerHTML = announcementsList.length
+    ? announcementsList
+        .map(
+          (a) => `
+          <div class="ann-card">
+            <h4>${a.title}</h4>
+            <p>${a.message}</p>
+            <small>Posted by ${a.faculty} • ${a.date}</small>
+          </div>`
+        )
+        .join("")
+    : `<p style="color:#64748b;font-size:13px;">No announcements right now.</p>`;
+
+  const uniqueSubjects = [...new Set(notesList.map((n) => n.subject))];
+  document.getElementById("note-subject-filter").innerHTML =
+    `<option value="ALL">All Subjects</option>` +
+    uniqueSubjects.map((s) => `<option value="${s}">${s}</option>`).join("");
+
+  renderNotesGrid();
+  renderCalendar();
+}
+
+const aiPanel = document.getElementById("ai-panel");
+const aiChatBox = document.getElementById("ai-chat-box");
+const aiInput = document.getElementById("ai-input");
+
+function toggleAIPanel(forceState) {
+  const open = typeof forceState === "boolean" ? forceState : !aiPanel.classList.contains("is-open");
+  aiPanel.classList.toggle("is-open", open);
+}
+
+document.getElementById("ai-fab").addEventListener("click", () => toggleAIPanel());
+document.getElementById("mobile-ai-btn").addEventListener("click", () => toggleAIPanel(true));
+document.getElementById("ai-close").addEventListener("click", () => toggleAIPanel(false));
+
+function buildAIReply(promptText) {
+  const q = promptText.toLowerCase();
+  const working = attendanceList.filter((r) => r.status !== "Holiday");
+  const present = working.filter((r) => r.status === "Present").length;
+  const absent = working.filter((r) => r.status === "Absent").length;
+  const pct = working.length ? Math.round((present / working.length) * 100) : 0;
+  const holCount = holidaysList.length + attendanceList.filter((r) => r.status === "Holiday").length;
+
+  if (q.includes("attendance")) {
+    return `📊 <strong>Attendance:</strong> <strong>${pct}%</strong> (${present} Present, ${absent} Absent out of ${working.length} working days).`;
+  }
+  if (q.includes("note") || q.includes("material") || q.includes("pdf")) {
+    if (!notesList.length) return "📚 No notes uploaded yet.";
+    return `📚 <strong>Available Notes (${notesList.length}):</strong><br>` +
+      notesList.slice(0, 5).map((n) => `• <strong>${n.subject}:</strong> ${n.title}`).join("<br>");
+  }
+  if (q.includes("holiday")) {
+    const sample = holidaysList.slice(0, 3).map((h) => `${h.date} (${h.occasion})`).join(", ");
+    return `🗓️ <strong>Total Holidays:</strong> <strong>${holCount}</strong> day(s).${sample ? `<br>Listed: ${sample}` : ""}`;
+  }
+  if (q.includes("progress") || q.includes("academic")) {
+    const remark = pct >= 85 ? "Excellent Standing" : pct >= 75 ? "Good Standing" : "Needs Attention";
+    return `🎓 <strong>Academic Progress (${studentProfile.fullName}):</strong><br>• Attendance: <strong>${pct}%</strong> (${remark})<br>• Study Materials: <strong>${notesList.length} PDFs</strong>`;
+  }
+  return `Ask me about <strong>"My attendance"</strong>, <strong>"My notes"</strong>, <strong>"How many holidays?"</strong>, or <strong>"My academic progress"</strong>.`;
+}
+
+function askAI(text) {
+  const trimmed = text.trim();
+  if (!trimmed) return;
+  aiChatBox.innerHTML += `<div class="bubble user">${trimmed}</div>`;
+  aiChatBox.innerHTML += `<div class="bubble bot">${buildAIReply(trimmed)}</div>`;
+  aiChatBox.scrollTop = aiChatBox.scrollHeight;
+}
+
+document.querySelectorAll(".ai-chip").forEach((chip) => {
+  chip.addEventListener("click", () => askAI(chip.dataset.q));
+});
+
+document.getElementById("ai-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  askAI(aiInput.value);
+  aiInput.value = "";
+});
+
+async function syncPortalData() {
   if (!studentProfile) return;
 
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith("PASTE_")) {
-    calendarGrid.innerHTML = `<p class="empty-msg" style="grid-column:1/-1">Set APPS_SCRIPT_URL in dashboard.js first.</p>`;
-    pdfGrid.innerHTML = `<p class="empty-msg">Set APPS_SCRIPT_URL in dashboard.js first.</p>`;
+    const ym = `${calDate.getFullYear()}-${String(calDate.getMonth() + 1).padStart(2, "0")}`;
+    attendanceList = [
+      { date: `${ym}-02`, subject: "Web Programming", status: "Present", markedBy: "Faculty" },
+      { date: `${ym}-03`, subject: "Python Lab", status: "Present", markedBy: "Faculty" },
+      { date: `${ym}-04`, subject: "DBMS Basics", status: "Absent", markedBy: "Faculty" }
+    ];
+    holidaysList = [{ date: `${ym}-05`, occasion: "Holiday", note: "Scheduled Camp Holiday" }];
+    announcementsList = [
+      { date: `${ym}-02`, title: "SVGP Summer Camp 2026 Notice", message: "Classes run smoothly Monday to Saturday.", faculty: "SVGP Coordinator" }
+    ];
+    notesList = [];
+    renderDashboard();
     return;
   }
 
+  const syncBtn = document.getElementById("sync-btn");
   syncBtn.disabled = true;
   syncBtn.textContent = "Syncing...";
 
@@ -218,44 +360,25 @@ async function syncAttendanceAndPdfs() {
       username: studentProfile.username || "",
       email: studentProfile.email || ""
     });
-    const res = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`);
-    const data = await res.json();
+    const resp = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`);
+    const payload = await resp.json();
 
-    if (data.ok) {
-      attendanceList = Array.isArray(data.attendance) ? data.attendance : [];
-      pdfNotesList = Array.isArray(data.notes) ? data.notes : [];
-
-      if (attendanceList.length > 0 && attendanceList[0].date) {
-        const [y, m] = attendanceList[0].date.split("-").map(Number);
-        if (y && m) viewDate = new Date(y, m - 1, 1);
-      }
-
-      updateStats();
-      renderCalendar();
-      populatePdfSubjects();
-      renderPdfNotes();
+    if (payload.ok) {
+      attendanceList = payload.attendance || [];
+      holidaysList = payload.holidays || [];
+      announcementsList = payload.announcements || [];
+      notesList = payload.notes || [];
+      renderDashboard();
     }
   } catch (err) {
-    dayDetailBox.textContent = `Sync error: ${err.message}`;
+    console.error("Failed to sync data:", err);
   } finally {
     syncBtn.disabled = false;
-    syncBtn.textContent = "↻ Sync";
+    syncBtn.textContent = "↻ Sync Data";
   }
 }
 
-prevMonthBtn.addEventListener("click", () => {
-  viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
-  renderCalendar();
-});
-
-nextMonthBtn.addEventListener("click", () => {
-  viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
-  renderCalendar();
-});
-
-syncBtn.addEventListener("click", syncAttendanceAndPdfs);
-pdfSearch.addEventListener("input", renderPdfNotes);
-pdfSubjectFilter.addEventListener("change", renderPdfNotes);
+document.getElementById("sync-btn").addEventListener("click", syncPortalData);
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -263,23 +386,22 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  const fallbackName = user.displayName || "Student";
   studentProfile = {
-    fullName: user.displayName || "Student",
+    fullName: fallbackName,
     username: "",
     email: user.email || "",
-    profileImage: "https://api.dicebear.com/9.x/initials/svg?seed=SVGP"
+    profileImage: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(fallbackName)}`
   };
 
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists()) {
-      studentProfile = { ...studentProfile, ...snap.data() };
-    }
+    if (snap.exists()) studentProfile = { ...studentProfile, ...snap.data() };
   } catch (_) {}
 
-  stuName.textContent = studentProfile.fullName;
-  stuId.textContent = `ID: ${studentProfile.username || studentProfile.email}`;
-  stuAvatar.src = studentProfile.profileImage;
+  document.getElementById("stu-name").textContent = studentProfile.fullName;
+  document.getElementById("stu-id").textContent = `ID: ${studentProfile.username || studentProfile.email}`;
+  document.getElementById("stu-avatar").src = studentProfile.profileImage;
 
-  await syncAttendanceAndPdfs();
+  await syncPortalData();
 });
