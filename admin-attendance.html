@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVGP Summer Camp — Student Registration &amp; Date-Wise Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0f294a;
+      --royal: #1e40af;
+      --indigo: #4338ca;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --line: #dbe3f0;
+      --ink: #0f172a;
+      --muted: #475569;
+      --green-bg: #dcfce7;
+      --green-ink: #15803d;
+      --red-bg: #fee2e2;
+      --red-ink: #b91c1c;
+    }
+    * { box-sizing: border-box; font-family: "Plus Jakarta Sans", sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--ink); padding: 20px; }
+    .wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    .topbar {
+      background: linear-gradient(135deg, var(--navy), var(--royal));
+      color: #fff; padding: 20px 24px; border-radius: 16px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .topbar h1 { margin: 4px 0 0; font-size: 22px; }
+    .topbar span { font-size: 11px; letter-spacing: 1.4px; font-weight: 700; opacity: 0.85; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1.25fr; gap: 20px; }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 22px; box-shadow: 0 8px 24px rgba(15, 41, 74, 0.05);
+    }
+    .card h2 { margin: 0 0 4px; font-size: 18px; color: var(--navy); }
+    .card p { margin: 0 0 16px; font-size: 13px; color: var(--muted); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 540px) { .row-2 { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .field label { font-size: 12.5px; font-weight: 700; color: var(--navy); }
+    .field input, .field select {
+      padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+      font-size: 13.5px; background: #f8fafc; outline: none;
+    }
+    .field input:focus, .field select:focus { border-color: var(--royal); background: #fff; }
+    .field input[readonly] { background: #eff6ff; color: var(--royal); font-weight: 700; }
+    .btn {
+      padding: 11px 18px; border: none; border-radius: 10px; font-weight: 700;
+      font-size: 13.5px; cursor: pointer; transition: 0.15s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--royal), var(--indigo)); color: #fff; width: 100%; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-save { background: #15803d; color: #fff; }
+    .btn-light { background: #eff6ff; color: var(--royal); border: 1px solid #bfdbfe; }
+    .msg { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 18px; }
+    .msg.err { color: var(--red-ink); }
+    .msg.ok { color: var(--green-ink); }
+    .date-bar {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; background: #eff6ff; padding: 14px;
+      border-radius: 12px; margin-bottom: 14px; border: 1px solid #bfdbfe;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th {
+      background: var(--royal); color: #fff; text-align: left; padding: 10px 12px;
+      font-size: 12.5px;
+    }
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child { border-radius: 0 8px 0 0; }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    .att-select {
+      padding: 6px 10px; border-radius: 8px; font-weight: 700; border: 1px solid var(--line);
+    }
+    .att-select.present { background: var(--green-bg); color: var(--green-ink); }
+    .att-select.absent { background: var(--red-bg); color: var(--red-ink); }
+    .pill-subj {
+      background: #e0e7ff; color: #3730a3; padding: 3px 9px; border-radius: 999px;
+      font-size: 11.5px; font-weight: 700;
+    }
+    .empty { text-align: center; color: var(--muted); padding: 24px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <span>S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
+        <h1>SVGP Summer Camp — Registration &amp; Date-Wise Attendance</h1>
+      </div>
+      <div id="today-badge" style="font-weight:700; font-size:13px;"></div>
+    </header>
+
+    <div class="grid-2">
+      <!-- LEFT: STUDENT REGISTRATION WITH AUTOMATIC DATE -->
+      <section class="card">
+        <h2>1. Register Student (Auto Date + Firebase &amp; Sheet)</h2>
+        <p>Registration date automatic ga capture ayyi Firebase &amp; Google Sheet lo save avutundi.</p>
+
+        <form id="reg-form" novalidate>
+          <div class="row-2">
+            <div class="field">
+              <label for="reg-fullname">Full Name *</label>
+              <input type="text" id="reg-fullname" placeholder="e.g. Praveen Kumar" required />
+            </div>
+            <div class="field">
+              <label for="reg-username">User ID *</label>
+              <input type="text" id="reg-username" placeholder="e.g. SVGP006" required />
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="reg-mobile">Mobile Number *</label>
+              <input type="tel" id="reg-mobile" maxlength="15" placeholder="9876543210" required />
+            </div>
+            <div class="field">
+              <label for="reg-email">Email ID *</label>
+              <input type="email" id="reg-email" placeholder="student@svpg.edu.in" required />
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="reg-subject">Subject *</label>
+              <select id="reg-subject" required>
+                <option value="DCA">DCA</option>
+                <option value="PGDCA">PGDCA</option>
+                <option value="MS Office">MS Office</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="reg-auto-date">Registration Date (Automatic)</label>
+              <input type="date" id="reg-auto-date" readonly />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-password">Student Login Password *</label>
+            <input type="password" id="reg-password" minlength="6" placeholder="Min 6 characters" required />
+          </div>
+
+          <button type="submit" id="reg-btn" class="btn btn-primary">
+            Register Student (Firebase + Google Sheet)
+          </button>
+          <div id="reg-msg" class="msg"></div>
+        </form>
+      </section>
+
+      <!-- RIGHT: SELECT DATE -> SHOW REGISTERED STUDENTS -> MARK ATTENDANCE -->
+      <section class="card">
+        <h2>2. Date-Wise Registered Students &amp; Attendance</h2>
+        <p>Date select chesthe aa date lo register ayina students list vastundi; attendance mark chesi update cheyandi.</p>
+
+        <div class="date-bar">
+          <div class="field" style="margin:0;">
+            <label for="att-date-picker">Select Registration Date</label>
+            <input type="date" id="att-date-picker" />
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" id="load-students-btn" class="btn btn-light">Load Students</button>
+            <button type="button" id="mark-all-present-btn" class="btn btn-light">All Present</button>
+            <button type="button" id="save-att-btn" class="btn btn-save">Save Attendance to Sheet &amp; Firebase</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Student Name</th>
+                <th>Subject</th>
+                <th>Reg. Date</th>
+                <th>Attendance</th>
+              </tr>
+            </thead>
+            <tbody id="att-list-body">
+              <tr><td colspan="5" class="empty">Select a date to view registered students.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="att-msg" class="msg"></div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="admin-attendance.js"></script>
+</body>
+</html>

@@ -3,55 +3,146 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SVGP Summer Camp — Admin Recovery Page</title>
+  <title>SVGP Summer Camp — Admin Page</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="common.css" />
-  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <main class="frame-wrap">
-    <section class="ledger-card">
-      <header class="masthead">
-        <span class="institution-tag">S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
-        <h1 class="masthead-title">Admin Recovery Console</h1>
-        <p class="masthead-subtitle">SVGP Summer Camp Password Assistance</p>
-      </header>
-
-      <div class="ledger-body">
-        <div class="panel-head">
-          <h2>Account Verification Status</h2>
-          <p id="admin-status-desc">Verified recovery request details</p>
-        </div>
-
-        <div class="member-table" style="margin-top: 0;">
-          <div class="member-item"><span>User ID</span><strong id="adm-username">-</strong></div>
-          <div class="member-item"><span>Mobile No</span><strong id="adm-mobile">-</strong></div>
-          <div class="member-item"><span>Gmail ID</span><strong id="adm-email">-</strong></div>
-          <div class="member-item"><span>Reset Link</span><strong id="adm-link-status">Sent</strong></div>
-        </div>
-
-        <div class="cta-group">
-          <a href="index.html" class="btn-primary-blue full-w">← Back to Login</a>
+  <div class="admin-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="badge">SVGP ADMIN</span>
+        <div>
+          <h1>SVGP Summer Camp Admin Console</h1>
+          <p>S.V. Government Polytechnic • Tirupati</p>
         </div>
       </div>
-    </section>
-  </main>
 
-  <script type="module">
-    const raw = sessionStorage.getItem("svgp_admin_recovery");
-    if (raw) {
-      try {
-        const data = JSON.parse(raw);
-        document.getElementById("adm-username").textContent = data.username || "-";
-        document.getElementById("adm-mobile").textContent = data.mobile || "-";
-        document.getElementById("adm-email").textContent = data.email || "-";
-        document.getElementById("adm-link-status").textContent = data.resetSent
-          ? "Sent to Gmail"
-          : "Pending";
-      } catch (_) {}
-    }
-  </script>
+      <nav class="page-links" aria-label="Linked Pages">
+        <a href="index.html" class="nav-link">Login Page</a>
+        <a href="dashboard.html" class="nav-link">Student Dashboard</a>
+        <a href="admin.html" class="nav-link is-active">Admin Page</a>
+        <button type="button" id="admin-logout-btn" class="nav-link btn-danger">Logout</button>
+      </nav>
+    </header>
+
+    <main class="grid-2">
+      <!-- Register Student -->
+      <section class="card">
+        <h2>Register Student</h2>
+        <p class="sub">Saves student profile &amp; subject in Firebase (`users`)</p>
+
+        <form id="reg-form" novalidate>
+          <div class="row-2">
+            <div class="field">
+              <label for="reg-name">Full Name *</label>
+              <input type="text" id="reg-name" placeholder="Student Full Name" required />
+            </div>
+            <div class="field">
+              <label for="reg-user">User ID *</label>
+              <input type="text" id="reg-user" placeholder="e.g. svgp001" required />
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="reg-mobile">Mobile No *</label>
+              <input type="tel" id="reg-mobile" maxlength="15" placeholder="10-digit mobile" required />
+            </div>
+            <div class="field">
+              <label for="reg-email">Email ID *</label>
+              <input type="email" id="reg-email" placeholder="student@gmail.com" required />
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="reg-subject">Subject *</label>
+              <select id="reg-subject">
+                <option value="DCA">DCA</option>
+                <option value="PGDCA">PGDCA</option>
+                <option value="MS Office">MS Office</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="reg-pass">Password *</label>
+              <input type="password" id="reg-pass" minlength="6" placeholder="Min 6 chars" required />
+            </div>
+          </div>
+
+          <button type="submit" id="reg-btn" class="btn-grad">Register Student</button>
+          <div id="reg-msg" class="msg"></div>
+        </form>
+      </section>
+
+      <!-- Add Class Note -->
+      <section class="card">
+        <h2>Publish Class Note</h2>
+        <p class="sub">Adds study note to Firebase (`classNotes`) for students</p>
+
+        <form id="note-form" novalidate>
+          <div class="row-2">
+            <div class="field">
+              <label for="note-sub">Subject *</label>
+              <select id="note-sub">
+                <option value="DCA">DCA</option>
+                <option value="PGDCA">PGDCA</option>
+                <option value="MS Office">MS Office</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="note-title">Note Title *</label>
+              <input type="text" id="note-title" placeholder="e.g. Lab Session 1 Notes" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="note-desc">Description</label>
+            <input type="text" id="note-desc" placeholder="Topic summary" />
+          </div>
+
+          <div class="field">
+            <label for="note-url">PDF / Document Link</label>
+            <input type="url" id="note-url" placeholder="https://drive.google.com/..." />
+          </div>
+
+          <button type="submit" id="note-btn" class="btn-grad">Save Class Note</button>
+          <div id="note-msg" class="msg"></div>
+        </form>
+      </section>
+    </main>
+
+    <!-- Registered Students List -->
+    <section class="card">
+      <div class="head-flex">
+        <div>
+          <h2>Registered Students (<span id="stu-count">0</span>)</h2>
+          <p class="sub">Live list from Firebase `users`</p>
+        </div>
+        <input type="search" id="stu-filter" class="search-inp" placeholder="Search student..." />
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Name</th>
+              <th>Subject</th>
+              <th>Mobile</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="stu-tbody">
+            <tr><td colspan="5" class="empty">Loading students...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="admin.js"></script>
 </body>
 </html>

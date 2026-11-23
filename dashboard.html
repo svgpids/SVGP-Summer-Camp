@@ -3,239 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SVGP Summer Camp 2026 — Student Dashboard</title>
+  <title>SVGP Summer Camp — Student Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Primary Sidebar">
-      <div>
-        <div class="brand-box">
-          <span class="brand-mark">SVGP</span>
-          <div class="brand-text">
-            <strong>Summer Camp</strong>
-            <small>S.V. Govt. Polytechnic</small>
-          </div>
-        </div>
-
-        <nav class="side-menu">
-          <button type="button" class="side-link is-active" data-section="overview">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-            <span>Overview</span>
-          </button>
-
-          <button type="button" class="side-link" data-section="calendar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span>Attendance Calendar</span>
-          </button>
-
-          <button type="button" class="side-link" data-section="notes">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            <span>Notes &amp; Materials</span>
-          </button>
-
-          <button type="button" class="side-link" data-section="announcements">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <span>Announcements</span>
-          </button>
-        </nav>
-      </div>
-
-      <div class="sidebar-bottom-controls">
-        <div class="timer-banner">
-          <span class="pulse-ring"></span>
-          <span>Session Left: <strong id="session-timer">30:00</strong></span>
-        </div>
-        <button type="button" id="logout-btn-desktop" class="btn-big-logout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <header class="top-header">
+  <div class="dash-shell">
+    <!-- Top Navigation Bar with Linked Pages -->
+    <header class="topbar">
+      <div class="brand">
+        <img src="logo.png" alt="SVGP Logo" class="brand-logo" onerror="this.style.display='none'" />
         <div>
-          <h1 id="page-heading">Student Overview</h1>
-          <p class="top-sub">Summer Computer Camp 2026 • S.V. Government Polytechnic, Tirupati</p>
+          <span class="kicker">S.V. GOVERNMENT POLYTECHNIC • TIRUPATI</span>
+          <h1>SVGP Summer Camp Dashboard</h1>
+        </div>
+      </div>
+
+      <nav class="page-links" aria-label="Portal Pages">
+        <a href="index.html" class="nav-pill">Login Page</a>
+        <a href="dashboard.html" class="nav-pill is-current">Student Dashboard</a>
+        <a href="admin.html" class="nav-pill">Admin Page</a>
+        <button type="button" id="logout-btn" class="nav-pill btn-logout">Logout</button>
+      </nav>
+    </header>
+
+    <!-- Student Profile Strip -->
+    <section class="profile-bar">
+      <div class="profile-left">
+        <img id="stu-avatar" src="https://api.dicebear.com/9.x/initials/svg?seed=SVGP" alt="Student Avatar" class="avatar" />
+        <div>
+          <h2 id="stu-name">Loading Student...</h2>
+          <p id="stu-meta">User ID: - • Subject: -</p>
+        </div>
+      </div>
+      <div class="profile-right">
+        <button type="button" id="refresh-btn" class="btn-primary-sm">↻ Refresh Records</button>
+      </div>
+    </section>
+
+    <!-- Summary Cards -->
+    <section class="kpi-grid">
+      <article class="kpi-card">
+        <span>Attendance %</span>
+        <strong id="stat-pct" class="c-blue">0%</strong>
+        <small id="stat-ratio">0 / 0 days present</small>
+      </article>
+      <article class="kpi-card">
+        <span>Present Days</span>
+        <strong id="stat-present" class="c-green">0</strong>
+        <small>Sessions attended</small>
+      </article>
+      <article class="kpi-card">
+        <span>Absent Days</span>
+        <strong id="stat-absent" class="c-red">0</strong>
+        <small>Sessions missed</small>
+      </article>
+      <article class="kpi-card">
+        <span>Class Notes</span>
+        <strong id="stat-notes" class="c-purple">0</strong>
+        <small>Available materials</small>
+      </article>
+    </section>
+
+    <!-- Attendance & Notes Two-Column Section -->
+    <main class="content-grid">
+      <!-- Attendance Records -->
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h3>Attendance Records</h3>
+            <p>Filter by status or subject</p>
+          </div>
+          <select id="status-filter" class="select-sm" aria-label="Filter attendance status">
+            <option value="ALL">All Status</option>
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+          </select>
         </div>
 
-        <div class="header-right">
-          <button type="button" id="sync-btn" class="btn-sync">↻ Sync Data</button>
-          <div class="student-badge">
-            <img id="stu-avatar" src="" alt="Student" />
-            <div>
-              <strong id="stu-name">Student</strong>
-              <span id="stu-id">ID: -</span>
-            </div>
-          </div>
-          <button type="button" id="logout-btn-top" class="btn-top-logout">Logout</button>
-        </div>
-      </header>
-
-      <section id="sec-overview" class="panel-view is-active">
-        <div class="kpi-grid">
-          <div class="surface-card kpi-card">
-            <span class="kpi-label">Attendance %</span>
-            <strong id="kpi-pct" class="kpi-num c-blue">0%</strong>
-            <small id="kpi-ratio" class="kpi-sub">0 / 0 working days</small>
-          </div>
-          <div class="surface-card kpi-card">
-            <span class="kpi-label">Present Days</span>
-            <strong id="kpi-present" class="kpi-num c-green">0</strong>
-            <small class="kpi-sub">Green calendar days</small>
-          </div>
-          <div class="surface-card kpi-card">
-            <span class="kpi-label">Absent Days</span>
-            <strong id="kpi-absent" class="kpi-num c-red">0</strong>
-            <small class="kpi-sub">Red calendar days</small>
-          </div>
-          <div class="surface-card kpi-card">
-            <span class="kpi-label">Holidays &amp; Notes</span>
-            <strong id="kpi-holidays" class="kpi-num c-violet">0</strong>
-            <small id="kpi-notes-count" class="kpi-sub">0 PDF materials</small>
-          </div>
-        </div>
-
-        <div class="two-col">
-          <div class="surface-card">
-            <div class="panel-head-row">
-              <h3>Recent Attendance</h3>
-              <button type="button" class="text-link" data-jump="calendar">Open Calendar →</button>
-            </div>
-            <div id="overview-recent" class="stack-list"></div>
-          </div>
-
-          <div class="surface-card">
-            <div class="panel-head-row">
-              <h3>Latest Announcements</h3>
-              <button type="button" class="text-link" data-jump="announcements">All Updates →</button>
-            </div>
-            <div id="overview-ann" class="stack-list"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-calendar" class="panel-view">
-        <div class="surface-card">
-          <div class="cal-top">
-            <div>
-              <h2>Monthly Attendance Calendar</h2>
-              <p>Tap any date to see full attendance or holiday details</p>
-            </div>
-            <div class="month-switcher">
-              <button type="button" id="prev-month" class="btn-step" aria-label="Previous Month">‹</button>
-              <strong id="cal-month-label">November 2026</strong>
-              <button type="button" id="next-month" class="btn-step" aria-label="Next Month">›</button>
-            </div>
-          </div>
-
-          <div class="color-legend">
-            <span><i class="swatch s-green"></i> Present</span>
-            <span><i class="swatch s-red"></i> Absent</span>
-            <span><i class="swatch s-grey"></i> Holiday</span>
-          </div>
-
-          <div class="week-header">
-            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-          </div>
-          <div id="calendar-grid" class="cal-grid"></div>
-
-          <div id="date-detail-box" class="date-detail-card">
-            <strong>Click any date</strong> on the calendar above to view subject, faculty, or holiday details.
-          </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="att-tbody">
+              <tr><td colspan="3" class="empty">Loading attendance...</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
-      <section id="sec-notes" class="panel-view">
-        <div class="surface-card">
-          <div class="notes-top">
-            <div>
-              <h2>Notes &amp; Study Materials</h2>
-              <p>Faculty uploaded notes, subject-wise PDFs &amp; downloads</p>
-            </div>
-            <div class="filter-bar">
-              <input type="search" id="note-search" placeholder="Search topic or PDF..." />
-              <select id="note-subject-filter">
-                <option value="ALL">All Subjects</option>
-              </select>
-            </div>
+      <!-- Class Notes -->
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h3>Class Notes &amp; Materials</h3>
+            <p>Subject-wise study notes</p>
           </div>
-
-          <div id="notes-grid" class="notes-grid"></div>
+          <input type="search" id="note-search" class="input-sm" placeholder="Search notes..." />
         </div>
-      </section>
 
-      <section id="sec-announcements" class="panel-view">
-        <div class="surface-card">
-          <div class="panel-head-row">
-            <h2>Latest Announcements</h2>
-          </div>
-          <div id="announcements-full" class="stack-list"></div>
+        <div id="notes-list" class="notes-stack">
+          <p class="empty">Loading class notes...</p>
         </div>
       </section>
     </main>
-  </div>
-
-  <nav class="mobile-bottom-bar" aria-label="Mobile Bottom Navigation">
-    <button type="button" class="m-nav-btn is-active" data-section="overview">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-      <span>Home</span>
-    </button>
-
-    <button type="button" class="m-nav-btn" data-section="calendar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span>Calendar</span>
-    </button>
-
-    <button type="button" class="m-nav-btn" data-section="notes">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Notes</span>
-    </button>
-
-    <button type="button" id="mobile-ai-btn" class="m-nav-btn m-ai-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l1.8 4.4L18.2 9l-4.4 1.6L12 15l-1.8-4.4L5.8 9l4.4-1.6L12 3z"/><path d="M19 15l.8 1.8L21.6 17.6l-1.8.8L19 20.2l-.8-1.8-1.8-.8 1.8-.8L19 15z"/></svg>
-      <span>SVGP AI</span>
-    </button>
-  </nav>
-
-  <button type="button" id="ai-fab" class="ai-fab-btn" aria-label="Open SVGP AI Assistant">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2">
-      <path d="M12 3l1.9 4.5L18.5 9l-4.6 1.5L12 15l-1.9-4.5L5.5 9l4.6-1.5L12 3z"/>
-      <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z"/>
-    </svg>
-    <span>SVGP AI</span>
-  </button>
-
-  <div id="ai-panel" class="ai-panel" aria-hidden="true">
-    <div class="ai-panel-top">
-      <div>
-        <strong>SVGP AI Assistant</strong>
-        <small>Attendance • Notes • Holidays • Progress</small>
-      </div>
-      <button type="button" id="ai-close" class="ai-close-btn">✕</button>
-    </div>
-
-    <div id="ai-chat-box" class="ai-chat-box">
-      <div class="bubble bot">
-        Hello! Ask me <strong>"My attendance"</strong>, <strong>"My notes"</strong>, <strong>"How many holidays?"</strong>, or <strong>"My academic progress"</strong>.
-      </div>
-    </div>
-
-    <div class="ai-chips">
-      <button type="button" class="ai-chip" data-q="My attendance">My attendance</button>
-      <button type="button" class="ai-chip" data-q="My notes">My notes</button>
-      <button type="button" class="ai-chip" data-q="How many holidays?">How many holidays?</button>
-      <button type="button" class="ai-chip" data-q="My academic progress">My academic progress</button>
-    </div>
-
-    <form id="ai-form" class="ai-form">
-      <input type="text" id="ai-input" placeholder="Type your question..." autocomplete="off" required />
-      <button type="submit">Ask</button>
-    </form>
   </div>
 
   <script type="module" src="dashboard.js"></script>

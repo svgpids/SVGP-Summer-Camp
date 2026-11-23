@@ -8,96 +8,113 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="logo-loader.css" />
 </head>
 <body>
-  <main class="portal-frame">
-    <!-- Decorative Flowing Waves -->
-    <div class="bg-wave-top" aria-hidden="true">
-      <svg viewBox="0 0 1200 220" preserveAspectRatio="none">
-        <path d="M0,0 L1200,0 L1200,45 C900,10 620,60 360,115 C180,155 70,190 0,210 Z" fill="url(#topWaveGrad1)" />
-        <path d="M0,0 L980,0 C720,30 480,85 260,145 C120,182 45,202 0,215 Z" fill="url(#topWaveGrad2)" opacity="0.55" />
+
+  <!-- Logo Loading Screen -->
+<div id="svgp-logo-loader" class="svgp-logo-loader" aria-label="Loading SVGP Summer Camp">
+  <div class="logo-loader-box">
+    <img src="logo.png" alt="SVGP Logo" class="loader-logo-img" onerror="this.style.display='none'" />
+    <h2 class="loader-title">SVGP Summer Camp</h2>
+    <p class="loader-sub">S.V. Government Polytechnic • Tirupati</p>
+    <div class="loader-bar-track">
+      <div id="loader-bar-fill" class="loader-bar-fill"></div>
+    </div>
+    <div id="loader-status-text" class="loader-status-text">Loading... 0%</div>
+  </div>
+</div>
+
+
+  <main class="camp-stage">
+    <!-- Decorative Blue-Purple Waves (PC & Mobile) -->
+    <div class="wave-top-wrap" aria-hidden="true">
+      <svg viewBox="0 0 1200 180" preserveAspectRatio="none">
+        <path class="wave-anim-1" d="M0,0 L1200,0 L1200,40 C920,15 640,65 360,115 C180,148 70,168 0,180 Z" fill="url(#topGradA)" />
+        <path class="wave-anim-2" d="M0,0 L940,0 C680,32 450,82 230,132 C105,160 40,172 0,180 Z" fill="url(#topGradB)" opacity="0.55" />
         <defs>
-          <linearGradient id="topWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#0066ff" />
-            <stop offset="55%" stop-color="#6d28d9" />
+          <linearGradient id="topGradA" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#0055ff" />
+            <stop offset="55%" stop-color="#5b21b6" />
             <stop offset="100%" stop-color="#9333ea" />
           </linearGradient>
-          <linearGradient id="topWaveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#3b82f6" />
+          <linearGradient id="topGradB" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#38bdf8" />
             <stop offset="100%" stop-color="#c084fc" />
           </linearGradient>
         </defs>
       </svg>
     </div>
 
-    <div class="bg-wave-bottom" aria-hidden="true">
-      <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
-        <path d="M0,35 C280,10 560,110 880,120 C1040,125 1140,105 1200,90 L1200,200 L0,200 Z" fill="url(#botWaveGrad2)" opacity="0.45" />
-        <path d="M0,75 C320,45 620,145 940,138 C1080,135 1155,115 1200,102 L1200,200 L0,200 Z" fill="url(#botWaveGrad1)" />
+    <div class="wave-bottom-wrap" aria-hidden="true">
+      <svg viewBox="0 0 1200 190" preserveAspectRatio="none">
+        <path class="wave-anim-2" d="M0,38 C290,8 570,115 890,122 C1050,126 1145,102 1200,85 L1200,190 L0,190 Z" fill="url(#botGradB)" opacity="0.5" />
+        <path class="wave-anim-1" d="M0,74 C320,42 630,142 945,134 C1085,130 1155,108 1200,92 L1200,190 L0,190 Z" fill="url(#botGradA)" />
         <defs>
-          <linearGradient id="botWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#0044cc" />
-            <stop offset="50%" stop-color="#3b28cc" />
+          <linearGradient id="botGradA" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#0040cc" />
+            <stop offset="50%" stop-color="#3730a3" />
             <stop offset="100%" stop-color="#7e22ce" />
           </linearGradient>
-          <linearGradient id="botWaveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#38bdf8" />
+          <linearGradient id="botGradB" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#2563eb" />
             <stop offset="100%" stop-color="#a855f7" />
           </linearGradient>
         </defs>
       </svg>
     </div>
 
-    <!-- Top Gradient Header Bar -->
-    <header class="top-navbar">
-      <div class="nav-left">
-        <span class="nav-college">S.V. Government Polytechnic</span>
-        <span class="nav-divider">|</span>
-        <span class="nav-event">Summer Computer Camp 2026</span>
+    <!-- Top Gradient Bar -->
+    <header class="camp-topbar">
+      <div class="topbar-left">
+        <span class="college-name">S.V. Government Polytechnic</span>
+        <span class="topbar-sep">|</span>
+        <span class="camp-tag">Summer Computer Camp 2026</span>
       </div>
-      <div class="nav-right">
+      <div class="topbar-right">
         <span>Learn</span>
-        <span class="nav-dot">•</span>
+        <span class="dot-sep">•</span>
         <span>Practice</span>
-        <span class="nav-dot">•</span>
+        <span class="dot-sep">•</span>
         <span>Grow</span>
       </div>
     </header>
 
-    <!-- Main 2-Column Content Grid -->
-    <section class="hero-grid">
-      <!-- Left Hero Branding -->
-      <div class="hero-left">
-        <div class="pill-row">
-          <span class="side-line"></span>
-          <span class="svgp-pill">S V G P</span>
-          <span class="side-line"></span>
+    <!-- Main 2-Column Grid (PC) / Single Column (Mobile) -->
+    <section class="camp-grid">
+      <!-- Left Hero Column -->
+      <div class="hero-col">
+        <div class="badge-line">
+          <span class="rule"></span>
+          <span class="svgp-chip">S V G P</span>
+          <span class="rule"></span>
         </div>
 
-        <h1 class="main-heading">
-          <span class="line-dark">Summer</span>
-          <span class="line-gradient">
-            <span class="word-purple">Computer</span> <span class="word-blue">Camp</span>
+        <h1 class="hero-title">
+          <span class="title-top">Summer</span>
+          <span class="title-bottom">
+            <span class="txt-purple">Computer</span> <span class="txt-blue">Camp</span>
           </span>
         </h1>
 
-        <div class="mobile-motto-row">
-          <span class="side-line short"></span>
-          <span class="motto-words">Learn • Practice • Grow</span>
-          <span class="side-line short"></span>
+        <div class="mobile-tagline">
+          <span class="rule short"></span>
+          <span>Learn • Practice • Grow</span>
+          <span class="rule short"></span>
         </div>
 
-        <div class="sub-motto-row">
-          <span class="side-line"></span>
-          <p class="sub-motto">Build Your Skills for a Brighter Future</p>
-          <span class="side-line"></span>
+        <div class="hero-subtitle-line">
+          <span class="rule"></span>
+          <p>Build Your Skills for a Brighter Future</p>
+          <span class="rule"></span>
         </div>
 
-        <div class="features-row">
-          <div class="feature-item">
-            <div class="feature-circle bg-indigo-soft">
-              <svg viewBox="0 0 24 24" class="feat-svg" fill="none" stroke="#4f46e5" stroke-width="2">
-                <rect x="3" y="4" width="18" height="12" rx="2" fill="#6366f1" fill-opacity="0.18" />
+        <!-- 4 Pillar Icons (Learn, Practice, Grow, Succeed) -->
+        <div class="pillars-row">
+          <div class="pillar-card anim-float-1">
+            <div class="pillar-circle c-indigo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2">
+                <rect x="3" y="4" width="18" height="12" rx="2" fill="#6366f1" fill-opacity="0.16" />
                 <path d="M2 18h20" stroke-linecap="round" />
                 <path d="M10 8l-2 2 2 2M14 8l2 2-2 2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -105,9 +122,9 @@
             <span>Learn</span>
           </div>
 
-          <div class="feature-item">
-            <div class="feature-circle bg-blue-soft">
-              <svg viewBox="0 0 24 24" class="feat-svg" fill="none" stroke="#1d4ed8" stroke-width="2">
+          <div class="pillar-card anim-float-2">
+            <div class="pillar-circle c-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2">
                 <circle cx="12" cy="12" r="3" />
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
               </svg>
@@ -115,9 +132,9 @@
             <span>Practice</span>
           </div>
 
-          <div class="feature-item">
-            <div class="feature-circle bg-royal-soft">
-              <svg viewBox="0 0 24 24" class="feat-svg" fill="none" stroke="#2563eb" stroke-width="2.2">
+          <div class="pillar-card anim-float-3">
+            <div class="pillar-circle c-royal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2">
                 <path d="M4 20V14M9 20V10M14 20V12M19 20V6" stroke-linecap="round" />
                 <path d="M4 11l5-4 5 2 6-5" stroke-linecap="round" stroke-linejoin="round" />
                 <path d="M16 4h4v4" stroke-linecap="round" stroke-linejoin="round" />
@@ -126,9 +143,9 @@
             <span>Grow</span>
           </div>
 
-          <div class="feature-item">
-            <div class="feature-circle bg-orange-soft">
-              <svg viewBox="0 0 24 24" class="feat-svg" fill="#f97316" stroke="#ea580c" stroke-width="1.5">
+          <div class="pillar-card anim-float-4">
+            <div class="pillar-circle c-amber">
+              <svg viewBox="0 0 24 24" fill="#f59e0b" stroke="#d97706" stroke-width="1.5">
                 <path d="M8 4h8v5a4 4 0 0 1-8 0V4z" />
                 <path d="M8 6H5a2 2 0 0 0 0 4h3M16 6h3a2 2 0 0 1 0 4h-3" fill="none" stroke-width="2" />
                 <path d="M12 13v4M8 20h8" fill="none" stroke-width="2.2" stroke-linecap="round" />
@@ -139,33 +156,34 @@
         </div>
       </div>
 
-      <!-- Right Side Login / Smooth Welcome Card -->
-      <div class="hero-right">
-        <div id="login-card" class="auth-card">
-          <div class="card-wave-header">
-            <div class="cap-icon-wrap" aria-hidden="true">
+      <!-- Right Login Card Column -->
+      <div class="form-col">
+        <div id="login-card" class="login-card">
+          <div class="card-banner">
+            <div class="grad-cap" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                 <path d="M6 12v5c3 3 9 3 12 0v-5" />
               </svg>
             </div>
-            <h2 id="card-heading">Login to Continue</h2>
-            <p id="card-subheading">Access your Summer Camp Portal</p>
+            <h2>Login to Continue</h2>
+            <p>Access your Summer Camp Portal</p>
 
-            <svg class="card-wave-cut" viewBox="0 0 400 36" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M0,16 Q110,38 225,18 T400,12 L400,36 L0,36 Z" fill="#ffffff" />
+            <svg class="banner-wave" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,15 Q115,36 230,16 T400,12 L400,34 L0,34 Z" fill="#ffffff" />
             </svg>
           </div>
 
-          <form id="login-form" class="card-body" novalidate>
-            <div class="field-group">
+          <!-- Login Form -->
+          <form id="login-form" class="login-body" novalidate>
+            <div class="input-block">
               <label for="login-identifier">
-                <svg class="field-icon icon-blue" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="lbl-icon blue-ic" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4.33 0-8 2.17-8 4.5V20h16v-1.5c0-2.33-3.67-4.5-8-4.5z" />
                 </svg>
                 <span>User ID or Mobile Number</span>
               </label>
-              <div class="input-box">
+              <div class="input-field-wrap">
                 <input
                   type="text"
                   id="login-identifier"
@@ -176,14 +194,14 @@
               </div>
             </div>
 
-            <div class="field-group">
+            <div class="input-block">
               <label for="login-password">
-                <svg class="field-icon icon-purple" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="lbl-icon purple-ic" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-6 6.73V17h2v-1.27a2 2 0 1 0-2 0zM10 9V7a2 2 0 0 1 4 0v2h-4z" />
                 </svg>
                 <span>Password</span>
               </label>
-              <div class="input-box">
+              <div class="input-field-wrap">
                 <input
                   type="password"
                   id="login-password"
@@ -191,8 +209,8 @@
                   autocomplete="current-password"
                   required
                 />
-                <button type="button" id="toggle-pwd-btn" class="eye-btn" aria-label="Show or Hide Password">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button type="button" id="toggle-pwd-btn" class="eye-toggle" aria-label="Toggle Password Visibility">
+                  <svg id="eye-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
                     <line x1="1" y1="1" x2="23" y2="23" />
                   </svg>
@@ -200,11 +218,11 @@
               </div>
             </div>
 
-            <div class="forgot-row">
-              <button type="button" id="open-forgot-btn" class="forgot-link">Forgot Password?</button>
+            <div class="forgot-wrap">
+              <button type="button" id="open-forgot-btn" class="forgot-btn">Forgot Password?</button>
             </div>
 
-            <button type="submit" id="login-btn" class="btn-gradient-login">
+            <button type="submit" id="login-submit-btn" class="btn-login-grad">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
                 <polyline points="10 17 15 12 10 7" />
@@ -213,101 +231,80 @@
               <span>Login</span>
             </button>
 
-            <div id="login-msg" class="status-msg" role="status" aria-live="polite"></div>
+            <div id="login-status" class="feedback-msg" role="status" aria-live="polite"></div>
 
-            <div class="card-footer-brand">
-              <span class="footer-line"></span>
-              <span class="footer-text">S.V. Government Polytechnic</span>
-              <span class="footer-line"></span>
+            <div class="card-bottom-brand">
+              <span class="line-thin"></span>
+              <span>S.V. Government Polytechnic</span>
+              <span class="line-thin"></span>
             </div>
           </form>
 
-          <form id="forgot-form" class="card-body" style="display: none;" novalidate>
-            <div class="field-group">
+          <!-- Forgot Password Panel -->
+          <form id="forgot-form" class="login-body" style="display: none;" novalidate>
+            <div class="input-block">
               <label for="reset-mobile">
-                <svg class="field-icon icon-blue" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="lbl-icon blue-ic" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.07 21 3 13.93 3 5a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z" />
                 </svg>
                 <span>Registered Mobile Number</span>
               </label>
-              <div class="input-box">
+              <div class="input-field-wrap">
                 <input type="tel" id="reset-mobile" placeholder="Enter registered Mobile Number" required />
               </div>
             </div>
 
-            <div class="field-group">
+            <div class="input-block">
               <label for="reset-email">
-                <svg class="field-icon icon-purple" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="lbl-icon purple-ic" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
                 </svg>
                 <span>Registered Gmail ID</span>
               </label>
-              <div class="input-box">
+              <div class="input-field-wrap">
                 <input type="email" id="reset-email" placeholder="Enter registered Gmail ID" required />
               </div>
             </div>
 
-            <button type="submit" id="send-reset-btn" class="btn-gradient-login">
-              <span>Verify &amp; Send Reset Link</span>
+            <button type="submit" id="send-reset-btn" class="btn-login-grad">
+              <span>Send Reset Link</span>
             </button>
 
-            <div class="forgot-row center-row">
-              <button type="button" id="back-to-login-btn" class="forgot-link">← Back to Login</button>
+            <div class="forgot-wrap center-align">
+              <button type="button" id="back-to-login-btn" class="forgot-btn">← Back to Login</button>
             </div>
 
-            <div id="reset-msg" class="status-msg" role="status" aria-live="polite"></div>
+            <div id="reset-status" class="feedback-msg" role="status" aria-live="polite"></div>
 
-            <div class="card-footer-brand">
-              <span class="footer-line"></span>
-              <span class="footer-text">S.V. Government Polytechnic</span>
-              <span class="footer-line"></span>
+            <div class="card-bottom-brand">
+              <span class="line-thin"></span>
+              <span>S.V. Government Polytechnic</span>
+              <span class="line-thin"></span>
             </div>
           </form>
         </div>
 
-        <!-- Smooth 5-Second Welcome Card -->
-        <div id="welcome-card" class="auth-card welcome-box" style="display: none;">
-          <div class="card-wave-header welcome-header">
-            <div class="session-badge">
-              <span class="pulse-dot"></span>
-              <span>Session Timer: <strong id="session-countdown">30:00</strong></span>
-            </div>
-
-            <div class="avatar-ring">
-              <img id="welcome-avatar" src="" alt="Student Profile Photo" class="student-photo-large" />
-            </div>
-
-            <h2 id="welcome-title" class="welcome-name-anim">Welcome!</h2>
-            <p class="welcome-subtitle-anim">SVGP Summer Computer Camp 2026</p>
-
-            <svg class="card-wave-cut" viewBox="0 0 400 36" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M0,16 Q110,38 225,18 T400,12 L400,36 L0,36 Z" fill="#ffffff" />
+        <!-- Logged-In Welcome Card -->
+        <div id="welcome-card" class="login-card" style="display: none;">
+          <div class="card-banner">
+            <img id="welcome-avatar" src="" alt="Student Photo" class="avatar-ring-img" />
+            <h2 id="welcome-title">Welcome!</h2>
+            <p>Opening Summer Computer Camp Dashboard...</p>
+            <svg class="banner-wave" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,15 Q115,36 230,16 T400,12 L400,34 L0,34 Z" fill="#ffffff" />
             </svg>
           </div>
 
-          <div class="card-body welcome-body-anim">
-            <div class="profile-summary">
-              <div class="sum-row"><span>Full Name</span><strong id="detail-name">-</strong></div>
-              <div class="sum-row"><span>User ID</span><strong id="detail-username">-</strong></div>
-              <div class="sum-row"><span>Mobile No</span><strong id="detail-mobile">-</strong></div>
-              <div class="sum-row"><span>Gmail</span><strong id="detail-email">-</strong></div>
+          <div class="login-body">
+            <div class="info-box">
+              <div class="info-row"><span>Full Name</span><strong id="detail-name">-</strong></div>
+              <div class="info-row"><span>User ID</span><strong id="detail-username">-</strong></div>
+              <div class="info-row"><span>Mobile No</span><strong id="detail-mobile">-</strong></div>
+              <div class="info-row"><span>Gmail</span><strong id="detail-email">-</strong></div>
             </div>
 
-            <div class="welcome-progress-wrap">
-              <div class="welcome-progress-head">
-                <span>Preparing your portal...</span>
-                <span id="welcome-sec-text">5s</span>
-              </div>
-              <div class="welcome-progress-track">
-                <div id="welcome-progress-fill" class="welcome-progress-fill"></div>
-              </div>
-            </div>
-
-            <div class="card-footer-brand">
-              <span class="footer-line"></span>
-              <span class="footer-text">S.V. Government Polytechnic</span>
-              <span class="footer-line"></span>
-            </div>
+            <a href="dashboard.html" class="btn-login-grad link-btn">Continue to Dashboard →</a>
+            <button type="button" id="logout-btn" class="btn-logout-soft">Logout</button>
           </div>
         </div>
       </div>
@@ -315,5 +312,6 @@
   </main>
 
   <script type="module" src="login.js"></script>
+  <script src="logo-loader.js"></script>
 </body>
 </html>

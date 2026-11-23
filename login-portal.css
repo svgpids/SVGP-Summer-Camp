@@ -1,0 +1,154 @@
+:root {
+  --navy-ink: #0f1f4b;
+  --text-main: #1e293b;
+  --text-sub: #64748b;
+  --card-bg: #ffffff;
+  --field-bg: #f8faff;
+  --field-border: #dce4f5;
+  --grad-brand: linear-gradient(90deg, #0062ff 0%, #4f46e5 52%, #8b2cf5 100%);
+  --grad-bar: linear-gradient(90deg, #005be6 0%, #3b38c6 50%, #7214d8 100%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #eef2fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: var(--text-main);
+}
+
+/* Main Frame */
+.camp-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  min-height: 650px;
+  background: linear-gradient(180deg, #f9faff 0%, #f0f4fe 100%);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(15, 31, 75, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Smooth Animated Waves */
+.wave-top-wrap,
+.wave-bottom-wrap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wave-top-wrap {
+  top: 46px;
+  height: 175px;
+}
+
+.wave-bottom-wrap {
+  bottom: 0;
+  height: 175px;
+}
+
+.wave-top-wrap svg,
+.wave-bottom-wrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wave-anim-1 {
+  animation: waveShiftLeft 9s ease-in-out infinite alternate;
+}
+
+.wave-anim-2 {
+  animation: waveShiftRight 11s ease-in-out infinite alternate;
+}
+
+@keyframes waveShiftLeft {
+  0% { transform: translateX(0px) scaleY(1); }
+  100% { transform: translateX(-18px) scaleY(1.04); }
+}
+
+@keyframes waveShiftRight {
+  0% { transform: translateX(0px) scaleY(1); }
+  100% { transform: translateX(18px) scaleY(0.97); }
+}
+
+/* Top Bar */
+.camp-topbar {
+  position: relative;
+  z-index: 5;
+  background: var(--grad-bar);
+  color: #ffffff;
+  padding: 15px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15.5px;
+}
+
+.college-name {
+  font-weight: 700;
+}
+
+.topbar-sep {
+  opacity: 0.55;
+}
+
+.camp-tag {
+  font-weight: 500;
+  color: #eef2ff;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-style: italic;
+  font-weight: 500;
+  color: #e0e7ff;
+}
+
+.dot-sep {
+  font-style: normal;
+  opacity: 0.75;
+}
+
+/* 2-Column Grid */
+.camp-grid {
+  position: relative;
+  z-index: 4;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  align-items: center;
+  gap: 28px;
+  padding: 36px 52px 56px;
+}
+
+/* Left Hero */
+.hero-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: enterUp

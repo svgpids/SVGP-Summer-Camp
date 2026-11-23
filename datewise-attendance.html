@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVGP Summer Camp — Date-Wise Student Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="datewise-attendance.css" />
+</head>
+<body>
+  <div class="dw-shell">
+    <header class="dw-header">
+      <div>
+        <span class="dw-kicker">S.V. GOVERNMENT POLYTECHNIC • SUMMER CAMP 2026</span>
+        <h1>Date-Wise Student Attendance</h1>
+      </div>
+
+      <div class="dw-user">
+        <img id="dw-avatar" src="" alt="Student" />
+        <div>
+          <strong id="dw-name">Loading...</strong>
+          <span id="dw-id">ID: -</span>
+        </div>
+        <button type="button" id="dw-sync-btn" class="btn-primary">↻ Sync</button>
+        <a href="dashboard.html" class="btn-ghost">Dashboard</a>
+        <button type="button" id="dw-logout-btn" class="btn-danger">Logout</button>
+      </div>
+    </header>
+
+    <section class="dw-stats">
+      <div class="stat-card">
+        <span>Overall Attendance</span>
+        <strong id="dw-pct" class="c-blue">0%</strong>
+        <small id="dw-ratio">0 / 0 sessions</small>
+      </div>
+      <div class="stat-card">
+        <span>Total Dates Recorded</span>
+        <strong id="dw-dates-count" class="c-violet">0</strong>
+        <small>Unique attendance dates</small>
+      </div>
+      <div class="stat-card">
+        <span>Present Sessions</span>
+        <strong id="dw-present" class="c-green">0</strong>
+        <small>Attended</small>
+      </div>
+      <div class="stat-card">
+        <span>Absent Sessions</span>
+        <strong id="dw-absent" class="c-red">0</strong>
+        <small>Missed</small>
+      </div>
+    </section>
+
+    <section class="dw-card">
+      <div class="dw-toolbar">
+        <div>
+          <h2>Attendance by Date</h2>
+          <p>Filter by specific date or status to inspect subject-wise records</p>
+        </div>
+
+        <div class="dw-filters">
+          <input type="date" id="filter-date" aria-label="Filter by Date" />
+          <select id="filter-status" aria-label="Filter by Status">
+            <option value="ALL">All Status</option>
+            <option value="Present">Present Only</option>
+            <option value="Absent">Absent Only</option>
+          </select>
+          <button type="button" id="clear-filters-btn" class="btn-ghost">Reset</button>
+        </div>
+      </div>
+
+      <div id="datewise-container" class="date-groups">
+        <p class="empty-text">Loading date-wise attendance...</p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="datewise-attendance.js"></script>
+</body>
+</html>

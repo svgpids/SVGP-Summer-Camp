@@ -1,0 +1,78 @@
+.svgp-logo-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #f4f1ea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.svgp-logo-loader.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.logo-loader-box {
+  width: min(340px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.loader-logo-img {
+  width: clamp(130px, 38vw, 175px);
+  height: auto;
+  object-fit: contain;
+  animation: logoSmoothPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes logoSmoothPulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.04);
+  }
+}
+
+.loader-title {
+  margin: 0;
+  font-size: clamp(18px, 4.5vw, 22px);
+  font-weight: 800;
+  color: #0f294a;
+}
+
+.loader-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: #475569;
+}
+
+.loader-bar-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.loader-bar-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1d4ed8, #6d28d9, #ec4899);
+  transition: width 0.08s linear;
+}
+
+.loader-status-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d4ed8;
+}
